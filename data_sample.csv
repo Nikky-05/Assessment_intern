@@ -1,0 +1,101 @@
+CustomerID,Name,Email,Phone,Product,Category,Quantity,Price,PurchaseDate,City,Country,FeedbackScore,Returned
+9123,Eric Salas,megan52@miles.com,001-835-481-3660,Headphones,Accessories,9,1736.61,2025-03-26,Kristaborough,United Arab Emirates,5.0,True
+2497,Alexander Reyes,ebrown@mcfarland.com,695.332.3436x124,Tablet,Gadgets,10,1138.14,2025-02-24,West Kyleville,Equatorial Guinea,,False
+1497,Laura Wyatt,timothywelch@yahoo.com,(511)578-6024,Phone,Electronics,6,1357.51,2025-04-21,New Stephen,Samoa,5.0,
+5419,Katherine Maldonado,lisa53@gomez-sandoval.com,790-526-7448x5367,Headphones,Gadgets,9,564.6,2025-01-31,Banksbury,Brazil,5.0,True
+1860,Douglas Foster,fortiz@edwards.org,+1-609-416-3568,Headphones,Gadgets,6,809.27,2025-05-02,Bowenside,Saint Vincent and the Grenadines,4.0,False
+6792,Susan Hall,ncox@yahoo.com,492-495-6114,Phone,Accessories,8,1412.24,2025-04-11,East Briannahaven,Saint Pierre and Miquelon,,False
+6951,Edward Barker,kim78@yahoo.com,+1-890-542-7339x562,Laptop,Gadgets,7,684.96,2025-09-13,Jonesland,Antigua and Barbuda,4.0,False
+3273,Michael Barber,angelagreen@smith.com,851-197-1995,Phone,Electronics,10,864.81,2024-12-22,East David,Djibouti,2.0,True
+4304,Catherine Valdez,jacobholden@morton.biz,+1-241-222-0975,Phone,Accessories,9,696.2,2025-03-14,East Jillstad,Taiwan,4.0,True
+8099,Eric Fitzgerald,jamesnguyen@martinez.com,456-126-8812,Phone,Electronics,5,1606.54,2025-04-25,Gregorytown,Colombia,5.0,True
+6820,Jacqueline Harmon,andrew96@hotmail.com,(058)128-9782,Laptop,Accessories,3,581.35,2025-04-12,Lindamouth,Togo,5.0,False
+7460,Victor Manning,lewissarah@dominguez.info,+1-322-328-3888,Phone,Electronics,2,1290.22,2024-11-18,Erikafort,Argentina,3.0,
+8050,Nicole Parks,curtismills@dawson.org,488-742-8365x795,Monitor,Accessories,9,1273.45,2025-09-20,Seanfort,Eritrea,,True
+2180,Joseph Greer,rjohnson@yahoo.com,631-652-9608x72544,Headphones,Accessories,1,1989.95,2025-01-06,Vanessaborough,Swaziland,2.0,True
+5947,Cheryl Gonzalez,wyattrobin@gmail.com,+1-792-318-7354,Tablet,Gadgets,7,170.69,2025-03-21,Port Gloriashire,Saint Martin,1.0,False
+6537,Terry Pena,rsanchez@wyatt.info,368-541-9911x772,Monitor,Gadgets,6,106.86,2025-05-10,Princeberg,Macao,3.0,
+1669,Craig Meyer,whitejennifer@alvarado.com,913-681-7537x6231,Phone,Gadgets,2,941.05,2024-11-17,Dominicfurt,Saint Pierre and Miquelon,4.0,False
+9296,Christopher Dixon,andrewsvanessa@hotmail.com,001-463-995-9531x112,Phone,Electronics,7,1869.71,2025-05-08,Port Davidside,Antarctica (the territory South of 60 deg S),3.0,True
+4730,Gordon King,randalljones@yahoo.com,409-540-9661x5350,Headphones,Gadgets,8,1288.97,2024-11-17,Doylechester,Latvia,5.0,False
+4740,Justin Ford,brownstephanie@yahoo.com,707.154.3879x305,Monitor,Gadgets,10,1594.8,2025-06-21,Shelbystad,Nauru,2.0,
+5418,Colin Hall,rphillips@yahoo.com,063.493.3752x567,Headphones,Electronics,2,67.87,2025-02-16,Mckenzieville,Ukraine,,False
+3170,Renee Solomon,coreyford@freeman.com,+1-003-921-4661x2234,Monitor,Electronics,5,1455.9,2025-04-05,Kevinside,Saint Helena,5.0,True
+1611,Aaron Gregory,delgadoemily@hotmail.com,(929)108-6931,Monitor,Accessories,2,833.63,2025-08-15,Port Robert,Hong Kong,3.0,False
+8260,Leah Wilson,perezmelissa@acevedo-sweeney.info,212-357-9772,Phone,Accessories,2,1463.58,2024-12-29,Lake Eric,Hungary,2.0,
+6052,Amanda Boyd,joshua53@horn-kelly.com,(293)944-6341x47304,Monitor,Gadgets,7,859.63,2024-11-02,Port Anthony,Brazil,1.0,False
+5721,Amy Walker,wendykennedy@liu.com,516.071.0790x87766,Tablet,Electronics,4,1319.33,2024-11-26,Normanbury,Bouvet Island (Bouvetoya),4.0,True
+5669,Matthew Newman,cory58@hotmail.com,118-463-2166x936,Monitor,Accessories,8,414.17,2024-10-08,Port Matthewfurt,Pitcairn Islands,3.0,True
+2651,Daniel Fox,markmorgan@ellis-flowers.com,780.876.6557,Headphones,Accessories,1,427.24,2025-01-23,Angelchester,Faroe Islands,,True
+3342,Elizabeth Mclean,robertfoster@hotmail.com,+1-492-768-7392x3999,Laptop,Gadgets,1,134.89,2025-06-23,South Billy,Somalia,2.0,True
+2633,Robert King,blackkimberly@gmail.com,800-525-8724x84900,Tablet,Accessories,2,243.22,2025-09-18,Shepherdmouth,Paraguay,5.0,True
+7596,Glenn Davis,schultzrichard@davidson-johnson.biz,001-351-913-4168x33465,Headphones,Accessories,4,1528.35,2025-07-12,Oliviachester,Pitcairn Islands,1.0,True
+6818,Mercedes Pearson,thomasann@gmail.com,8220521027,Monitor,Gadgets,1,1716.18,2024-11-29,West Nicoleport,Argentina,5.0,
+2396,Christopher Clark,psmall@yahoo.com,622-705-2550,Monitor,Gadgets,10,1710.03,2024-11-17,Fernandezfort,Anguilla,5.0,True
+8124,Heather Holt,cynthiagray@hernandez-horton.com,001-360-385-7228,Monitor,Electronics,10,1537.46,2024-12-05,East Melissafurt,Bermuda,,
+4256,Thomas Webb,andrealamb@yahoo.com,(482)324-8045,Tablet,Electronics,1,1867.36,2024-12-03,New William,Anguilla,,
+5396,Tonya Austin,fmoore@banks.info,(416)596-9151x32087,Phone,Gadgets,10,456.53,2025-02-28,Samanthafurt,Namibia,,True
+6861,Oscar Herrera,johnsanchez@gmail.com,+1-829-758-9928,Tablet,Accessories,8,99.27,2025-03-02,South Sandraside,Montenegro,1.0,True
+5131,Julie Hickman,rford@guerrero.com,001-304-826-8266x655,Laptop,Electronics,9,1339.99,2025-01-19,New Michael,Yemen,1.0,
+1622,Justin Robertson,jason47@hays.info,(395)058-2323x47446,Headphones,Gadgets,5,1492.19,2025-07-10,Susanhaven,Belize,5.0,True
+7966,Jordan Brown,jameswilliams@hotmail.com,120-574-1058,Laptop,Electronics,10,877.13,2025-01-15,New Justinton,Venezuela,2.0,True
+9288,Regina Carter MD,hartmanjorge@hart.com,415.824.5528x8275,Phone,Gadgets,4,1803.12,2024-10-10,Danielsborough,Tonga,2.0,True
+8339,Kyle Potter,kingjeff@hotmail.com,933-238-6506x6879,Tablet,Gadgets,5,269.15,2025-05-27,Lake Micheal,Nigeria,1.0,
+9851,Sheila Hutchinson,yesenia75@gmail.com,(828)874-5959,Laptop,Electronics,1,1897.22,2025-03-29,Tammyfort,Colombia,2.0,False
+5012,Matthew Williams,thomaslindsey@gmail.com,(861)524-4434x718,Monitor,Electronics,6,1028.6,2024-12-28,Curtisshire,Austria,1.0,False
+9886,Brent Rose,stephenbrown@yahoo.com,8403345654,Laptop,Accessories,10,1504.16,2025-03-26,Markchester,Malawi,4.0,True
+2744,Bradley Lester,umcmahon@gmail.com,+1-358-936-8886x4254,Tablet,Accessories,9,1350.45,2024-10-23,Warnerberg,Malaysia,,
+6693,Elizabeth Jones,ulloyd@rodriguez.com,990-027-2960x4455,Tablet,Electronics,8,950.96,2024-12-25,Castillohaven,Aruba,,False
+7779,Alejandro Carter,eparker@yahoo.com,079.851.7900x60640,Phone,Accessories,4,1601.42,2025-07-09,Traceybury,Liberia,1.0,False
+3626,Jordan Baker,zdavis@gmail.com,+1-926-836-2414x4246,Monitor,Accessories,8,495.97,2025-09-14,East William,Falkland Islands (Malvinas),4.0,
+5990,Catherine Vasquez,hrobertson@hotmail.com,345-800-4023x200,Laptop,Electronics,10,1322.92,2024-10-03,East Alexander,Puerto Rico,1.0,False
+5700,Molly Gutierrez,michelle90@matthews-perez.org,617.976.3928x1080,Monitor,Electronics,5,1065.33,2025-06-22,South Judyfurt,Gabon,,False
+8601,Juan Clark,laura75@mitchell.net,(906)361-4215x77253,Phone,Electronics,5,980.86,2025-03-05,Nashfurt,New Caledonia,4.0,
+5329,Amy Kim,sarah24@yahoo.com,001-407-800-0242x72063,Tablet,Gadgets,3,1182.45,2025-02-09,Nguyenview,Malaysia,1.0,False
+2675,Mrs. Debbie Little,jamie03@boyer-mcclure.com,3677674281,Tablet,Electronics,6,607.75,2025-03-10,West Tony,Costa Rica,1.0,False
+9877,Kenneth Black,gmoody@gmail.com,767-935-5239x924,Phone,Electronics,8,1805.8,2024-10-17,New Jasmineport,Iran,5.0,False
+8764,Craig Combs,garciamonica@hotmail.com,(872)551-8096x885,Monitor,Accessories,4,752.68,2025-05-21,Dayport,Ukraine,2.0,
+8887,Richard Cole,mark17@gentry.com,285-558-1915x8177,Laptop,Gadgets,10,1528.54,2025-02-04,Matthewchester,Bulgaria,,
+5944,Steven Wood,plove@jacobs-wilson.com,+1-559-296-9933,Laptop,Gadgets,10,1434.32,2025-08-03,Aprilfort,Ukraine,5.0,False
+5712,Steven Fisher,garciapatricia@yahoo.com,+1-636-449-4477x6172,Headphones,Gadgets,3,729.55,2025-08-10,New Samantha,Antarctica (the territory South of 60 deg S),1.0,True
+5949,Kelly Gonzales,danielle99@foster.net,124-489-6728,Headphones,Gadgets,6,353.32,2025-01-23,Port James,United States Minor Outlying Islands,2.0,True
+5582,Anthony Mayo,obrooks@jenkins.com,(256)190-3026x928,Tablet,Accessories,4,1100.29,2025-05-06,Michaelport,Libyan Arab Jamahiriya,3.0,
+4985,Christina Faulkner,stephen87@anderson.info,585-834-1209,Monitor,Gadgets,9,1348.46,2024-11-23,Ericton,Egypt,2.0,
+1194,Peter Myers,traciodom@hotmail.com,+1-917-253-1709x82738,Laptop,Gadgets,3,1516.19,2025-05-14,Deniseville,Guam,1.0,False
+2073,David Sanders,bushmichael@johnson.com,123-857-5647x241,Tablet,Gadgets,5,710.96,2025-09-15,Port Kathrynburgh,United States Minor Outlying Islands,2.0,False
+9141,Courtney Martin,vsmith@collins-henson.com,108-078-7300x77639,Monitor,Electronics,5,780.15,2025-02-22,Smithshire,Wallis and Futuna,,True
+6305,William Sparks,christinehayes@hotmail.com,+1-546-016-4077x8905,Monitor,Gadgets,4,1260.41,2025-06-09,Port Jennifermouth,Yemen,1.0,True
+4502,Ellen Chen,henrymichael@chavez.info,001-591-491-2286,Laptop,Accessories,5,1746.06,2025-02-01,Patrickside,Albania,1.0,
+5579,Charles Morse,daniel54@mendoza.com,+1-529-571-3239x9331,Laptop,Gadgets,10,1382.34,2025-06-17,East Ronald,Martinique,5.0,
+5889,James Howe,beasleygregory@gmail.com,9285806165,Phone,Accessories,10,594.97,2024-12-17,Sandrashire,Romania,5.0,False
+4495,David Steele,peteranthony@schmidt-wilson.info,(955)532-9216x671,Phone,Electronics,3,1657.7,2025-07-17,West Amy,Mauritania,,True
+5637,Denise Jackson,jaimewilson@mcpherson-may.info,001-392-171-3364x423,Headphones,Accessories,7,1359.27,2025-09-21,Lake Charlotteview,Australia,2.0,False
+8835,Kurt Mathis,floydchristopher@hotmail.com,187-241-6329x55945,Monitor,Accessories,7,491.78,2025-02-24,North Carl,Trinidad and Tobago,1.0,
+7480,Angela Morrison,pmiller@hotmail.com,028-481-2535,Headphones,Accessories,8,1405.4,2025-01-10,Lake Cassandra,Hungary,1.0,True
+4017,Martin Rich,wardcaitlin@west-martin.com,+1-093-875-6679,Monitor,Gadgets,10,470.58,2024-10-25,East Jeffrey,Djibouti,,True
+6048,Alexander Tyler,shannon68@hotmail.com,001-890-948-5268x625,Monitor,Gadgets,8,1639.88,2025-06-11,Port Adam,Chad,3.0,
+6899,Zachary Barber,askinner@hotmail.com,(603)746-0876x614,Tablet,Gadgets,1,1995.17,2024-12-05,Delgadobury,Saint Pierre and Miquelon,4.0,True
+4136,Victor Williams,eric98@hotmail.com,380.311.1362x56044,Phone,Gadgets,4,533.5,2025-08-11,New Tonya,Bermuda,4.0,
+6702,Brian Blankenship,lsmith@gmail.com,001-322-288-3412,Tablet,Electronics,6,243.01,2025-02-06,Tylermouth,Kuwait,1.0,False
+7276,Julia Duncan,idavis@yahoo.com,+1-299-428-4399x12556,Phone,Accessories,1,1525.3,2024-10-15,East Amberfurt,French Polynesia,2.0,
+2467,Michael Guzman,garciamegan@collins.com,926.214.0602,Headphones,Accessories,10,1352.21,2025-03-10,Hallborough,Brazil,2.0,False
+3974,Amanda Miller,janetsalazar@gmail.com,(725)570-9458x8143,Phone,Electronics,3,215.29,2025-06-15,Mendezton,Albania,5.0,True
+6474,Carol Williams,brettbean@robbins.biz,+1-409-643-7247,Headphones,Electronics,7,291.92,2025-01-08,Stephanieview,Hong Kong,4.0,False
+6180,Megan Wade,dbrown@gmail.com,7540560397,Tablet,Accessories,3,1275.32,2025-01-14,Frenchshire,Sweden,5.0,False
+3795,Amy Sloan,mark41@bass.info,6181537030,Monitor,Accessories,7,1375.71,2025-04-12,Wilsonstad,India,,
+7620,Patrick Donovan,ejensen@hotmail.com,642.356.2079x0463,Tablet,Accessories,6,358.32,2024-10-13,South Davidland,Cocos (Keeling) Islands,,False
+8883,Ashley Turner,martincassandra@hotmail.com,694-615-5549x016,Laptop,Gadgets,1,1677.73,2025-06-21,Hendersonmouth,Barbados,2.0,False
+9266,Natalie Gutierrez,cameronjames@ramos.com,(897)599-8429,Monitor,Electronics,4,536.01,2025-09-02,Bentonburgh,Slovakia (Slovak Republic),5.0,
+4987,Daniel Lewis,thomaszavala@yahoo.com,+1-516-481-1404x10558,Headphones,Gadgets,1,199.18,2025-04-01,West Kristina,Liberia,3.0,
+1832,Steven Peters,ellislauren@krueger.com,633.614.8562,Monitor,Gadgets,8,626.66,2024-11-07,West Daniel,Gambia,4.0,False
+2530,Tonya Blake,williamsrachel@gmail.com,(446)395-1792,Headphones,Accessories,9,1580.69,2025-04-09,East Jacquelinebury,United States Virgin Islands,1.0,True
+9293,Anthony Moss,rowlandkenneth@hotmail.com,137-234-5704,Monitor,Gadgets,10,605.47,2024-11-22,Melissamouth,Guernsey,1.0,False
+4923,Patricia Carey,matthew46@yahoo.com,+1-991-920-6943x54308,Headphones,Gadgets,6,770.68,2024-10-03,Elliottstad,Cambodia,5.0,False
+4266,Johnathan Perry,floresdarren@foster.com,170.925.8762x59874,Laptop,Electronics,10,349.98,2025-09-04,Alisontown,Niue,,
+9232,Stephen Dominguez,blopez@kirk-taylor.net,752.475.8314,Headphones,Gadgets,10,1503.98,2025-05-07,Brendamouth,Ethiopia,1.0,False
+5723,Collin White,juanlee@yahoo.com,486-661-1294,Phone,Gadgets,9,1877.53,2025-05-26,New Sherry,Egypt,3.0,False
+2994,Emily Mercer,khampton@gmail.com,662-399-8096x5908,Headphones,Accessories,4,1040.44,2025-03-03,North Jonathan,Mozambique,,False
+1653,Jennifer Reyes,anitawillis@yahoo.com,+1-064-238-1276x1107,Tablet,Gadgets,8,671.26,2024-12-05,East Edwardstad,Mayotte,5.0,False
+3637,Holly Carson,bridgessydney@yahoo.com,246.354.8358x975,Monitor,Electronics,1,1942.05,2024-12-03,South Leahmouth,Bangladesh,4.0,False
+6763,Rebecca Nguyen,krichardson@murray.com,(213)530-2042,Headphones,Gadgets,8,751.1,2024-11-21,North Jakeport,Svalbard & Jan Mayen Islands,,False
+7476,Ronnie Brown,johnsondavid@gmail.com,+1-394-013-7192x4320,Tablet,Electronics,5,1243.04,2025-09-13,Paceton,Uganda,2.0,True

@@ -1,0 +1,101 @@
+CustomerID,Product,Category,Quantity,Price,PurchaseDate,City,Country,FeedbackScore,Returned,Sales
+9123,Headphones,Accessories,9,1736.61,2025-03-26,Kristaborough,United Arab Emirates,5,1,15629.49
+2497,Tablet,Gadgets,10,1138.14,2025-02-24,West Kyleville,Equatorial Guinea,3,0,11381.400000000001
+1497,Phone,Electronics,6,1357.51,2025-04-21,New Stephen,Samoa,5,0,8145.0599999999995
+5419,Headphones,Gadgets,9,564.6,2025-01-31,Banksbury,Brazil,5,1,5081.400000000001
+1860,Headphones,Gadgets,6,809.27,2025-05-02,Bowenside,Saint Vincent and the Grenadines,4,0,4855.62
+6792,Phone,Accessories,8,1412.24,2025-04-11,East Briannahaven,Saint Pierre and Miquelon,3,0,11297.92
+6951,Laptop,Gadgets,7,684.96,2025-09-13,Jonesland,Antigua and Barbuda,4,0,4794.72
+3273,Phone,Electronics,10,864.81,2024-12-22,East David,Djibouti,2,1,8648.099999999999
+4304,Phone,Accessories,9,696.2,2025-03-14,East Jillstad,Taiwan,4,1,6265.8
+8099,Phone,Electronics,5,1606.54,2025-04-25,Gregorytown,Colombia,5,1,8032.7
+6820,Laptop,Accessories,3,581.35,2025-04-12,Lindamouth,Togo,5,0,1744.0500000000002
+7460,Phone,Electronics,2,1290.22,2024-11-18,Erikafort,Argentina,3,0,2580.44
+8050,Monitor,Accessories,9,1273.45,2025-09-20,Seanfort,Eritrea,3,1,11461.050000000001
+2180,Headphones,Accessories,1,1989.95,2025-01-06,Vanessaborough,Swaziland,2,1,1989.95
+5947,Tablet,Gadgets,7,170.69,2025-03-21,Port Gloriashire,Saint Martin,1,0,1194.83
+6537,Monitor,Gadgets,6,106.86,2025-05-10,Princeberg,Macao,3,0,641.16
+1669,Phone,Gadgets,2,941.05,2024-11-17,Dominicfurt,Saint Pierre and Miquelon,4,0,1882.1
+9296,Phone,Electronics,7,1869.71,2025-05-08,Port Davidside,Antarctica (the territory South of 60 deg S),3,1,13087.970000000001
+4730,Headphones,Gadgets,8,1288.97,2024-11-17,Doylechester,Latvia,5,0,10311.76
+4740,Monitor,Gadgets,10,1594.8,2025-06-21,Shelbystad,Nauru,2,0,15948.0
+5418,Headphones,Electronics,2,67.87,2025-02-16,Mckenzieville,Ukraine,3,0,135.74
+3170,Monitor,Electronics,5,1455.9,2025-04-05,Kevinside,Saint Helena,5,1,7279.5
+1611,Monitor,Accessories,2,833.63,2025-08-15,Port Robert,Hong Kong,3,0,1667.26
+8260,Phone,Accessories,2,1463.58,2024-12-29,Lake Eric,Hungary,2,0,2927.16
+6052,Monitor,Gadgets,7,859.63,2024-11-02,Port Anthony,Brazil,1,0,6017.41
+5721,Tablet,Electronics,4,1319.33,2024-11-26,Normanbury,Bouvet Island (Bouvetoya),4,1,5277.32
+5669,Monitor,Accessories,8,414.17,2024-10-08,Port Matthewfurt,Pitcairn Islands,3,1,3313.36
+2651,Headphones,Accessories,1,427.24,2025-01-23,Angelchester,Faroe Islands,3,1,427.24
+3342,Laptop,Gadgets,1,134.89,2025-06-23,South Billy,Somalia,2,1,134.89
+2633,Tablet,Accessories,2,243.22,2025-09-18,Shepherdmouth,Paraguay,5,1,486.44
+7596,Headphones,Accessories,4,1528.35,2025-07-12,Oliviachester,Pitcairn Islands,1,1,6113.4
+6818,Monitor,Gadgets,1,1716.18,2024-11-29,West Nicoleport,Argentina,5,0,1716.18
+2396,Monitor,Gadgets,10,1710.03,2024-11-17,Fernandezfort,Anguilla,5,1,17100.3
+8124,Monitor,Electronics,10,1537.46,2024-12-05,East Melissafurt,Bermuda,3,0,15374.6
+4256,Tablet,Electronics,1,1867.36,2024-12-03,New William,Anguilla,3,0,1867.36
+5396,Phone,Gadgets,10,456.53,2025-02-28,Samanthafurt,Namibia,3,1,4565.299999999999
+6861,Tablet,Accessories,8,99.27,2025-03-02,South Sandraside,Montenegro,1,1,794.16
+5131,Laptop,Electronics,9,1339.99,2025-01-19,New Michael,Yemen,1,0,12059.91
+1622,Headphones,Gadgets,5,1492.19,2025-07-10,Susanhaven,Belize,5,1,7460.950000000001
+7966,Laptop,Electronics,10,877.13,2025-01-15,New Justinton,Venezuela,2,1,8771.3
+9288,Phone,Gadgets,4,1803.12,2024-10-10,Danielsborough,Tonga,2,1,7212.48
+8339,Tablet,Gadgets,5,269.15,2025-05-27,Lake Micheal,Nigeria,1,0,1345.75
+9851,Laptop,Electronics,1,1897.22,2025-03-29,Tammyfort,Colombia,2,0,1897.22
+5012,Monitor,Electronics,6,1028.6,2024-12-28,Curtisshire,Austria,1,0,6171.599999999999
+9886,Laptop,Accessories,10,1504.16,2025-03-26,Markchester,Malawi,4,1,15041.6
+2744,Tablet,Accessories,9,1350.45,2024-10-23,Warnerberg,Malaysia,3,0,12154.050000000001
+6693,Tablet,Electronics,8,950.96,2024-12-25,Castillohaven,Aruba,3,0,7607.68
+7779,Phone,Accessories,4,1601.42,2025-07-09,Traceybury,Liberia,1,0,6405.68
+3626,Monitor,Accessories,8,495.97,2025-09-14,East William,Falkland Islands (Malvinas),4,0,3967.76
+5990,Laptop,Electronics,10,1322.92,2024-10-03,East Alexander,Puerto Rico,1,0,13229.2
+5700,Monitor,Electronics,5,1065.33,2025-06-22,South Judyfurt,Gabon,3,0,5326.65
+8601,Phone,Electronics,5,980.86,2025-03-05,Nashfurt,New Caledonia,4,0,4904.3
+5329,Tablet,Gadgets,3,1182.45,2025-02-09,Nguyenview,Malaysia,1,0,3547.3500000000004
+2675,Tablet,Electronics,6,607.75,2025-03-10,West Tony,Costa Rica,1,0,3646.5
+9877,Phone,Electronics,8,1805.8,2024-10-17,New Jasmineport,Iran,5,0,14446.4
+8764,Monitor,Accessories,4,752.68,2025-05-21,Dayport,Ukraine,2,0,3010.72
+8887,Laptop,Gadgets,10,1528.54,2025-02-04,Matthewchester,Bulgaria,3,0,15285.4
+5944,Laptop,Gadgets,10,1434.32,2025-08-03,Aprilfort,Ukraine,5,0,14343.199999999999
+5712,Headphones,Gadgets,3,729.55,2025-08-10,New Samantha,Antarctica (the territory South of 60 deg S),1,1,2188.6499999999996
+5949,Headphones,Gadgets,6,353.32,2025-01-23,Port James,United States Minor Outlying Islands,2,1,2119.92
+5582,Tablet,Accessories,4,1100.29,2025-05-06,Michaelport,Libyan Arab Jamahiriya,3,0,4401.16
+4985,Monitor,Gadgets,9,1348.46,2024-11-23,Ericton,Egypt,2,0,12136.14
+1194,Laptop,Gadgets,3,1516.19,2025-05-14,Deniseville,Guam,1,0,4548.57
+2073,Tablet,Gadgets,5,710.96,2025-09-15,Port Kathrynburgh,United States Minor Outlying Islands,2,0,3554.8
+9141,Monitor,Electronics,5,780.15,2025-02-22,Smithshire,Wallis and Futuna,3,1,3900.75
+6305,Monitor,Gadgets,4,1260.41,2025-06-09,Port Jennifermouth,Yemen,1,1,5041.64
+4502,Laptop,Accessories,5,1746.06,2025-02-01,Patrickside,Albania,1,0,8730.3
+5579,Laptop,Gadgets,10,1382.34,2025-06-17,East Ronald,Martinique,5,0,13823.4
+5889,Phone,Accessories,10,594.97,2024-12-17,Sandrashire,Romania,5,0,5949.700000000001
+4495,Phone,Electronics,3,1657.7,2025-07-17,West Amy,Mauritania,3,1,4973.1
+5637,Headphones,Accessories,7,1359.27,2025-09-21,Lake Charlotteview,Australia,2,0,9514.89
+8835,Monitor,Accessories,7,491.78,2025-02-24,North Carl,Trinidad and Tobago,1,0,3442.46
+7480,Headphones,Accessories,8,1405.4,2025-01-10,Lake Cassandra,Hungary,1,1,11243.2
+4017,Monitor,Gadgets,10,470.58,2024-10-25,East Jeffrey,Djibouti,3,1,4705.8
+6048,Monitor,Gadgets,8,1639.88,2025-06-11,Port Adam,Chad,3,0,13119.04
+6899,Tablet,Gadgets,1,1995.17,2024-12-05,Delgadobury,Saint Pierre and Miquelon,4,1,1995.17
+4136,Phone,Gadgets,4,533.5,2025-08-11,New Tonya,Bermuda,4,0,2134.0
+6702,Tablet,Electronics,6,243.01,2025-02-06,Tylermouth,Kuwait,1,0,1458.06
+7276,Phone,Accessories,1,1525.3,2024-10-15,East Amberfurt,French Polynesia,2,0,1525.3
+2467,Headphones,Accessories,10,1352.21,2025-03-10,Hallborough,Brazil,2,0,13522.1
+3974,Phone,Electronics,3,215.29,2025-06-15,Mendezton,Albania,5,1,645.87
+6474,Headphones,Electronics,7,291.92,2025-01-08,Stephanieview,Hong Kong,4,0,2043.44
+6180,Tablet,Accessories,3,1275.32,2025-01-14,Frenchshire,Sweden,5,0,3825.96
+3795,Monitor,Accessories,7,1375.71,2025-04-12,Wilsonstad,India,3,0,9629.970000000001
+7620,Tablet,Accessories,6,358.32,2024-10-13,South Davidland,Cocos (Keeling) Islands,3,0,2149.92
+8883,Laptop,Gadgets,1,1677.73,2025-06-21,Hendersonmouth,Barbados,2,0,1677.73
+9266,Monitor,Electronics,4,536.01,2025-09-02,Bentonburgh,Slovakia (Slovak Republic),5,0,2144.04
+4987,Headphones,Gadgets,1,199.18,2025-04-01,West Kristina,Liberia,3,0,199.18
+1832,Monitor,Gadgets,8,626.66,2024-11-07,West Daniel,Gambia,4,0,5013.28
+2530,Headphones,Accessories,9,1580.69,2025-04-09,East Jacquelinebury,United States Virgin Islands,1,1,14226.210000000001
+9293,Monitor,Gadgets,10,605.47,2024-11-22,Melissamouth,Guernsey,1,0,6054.700000000001
+4923,Headphones,Gadgets,6,770.68,2024-10-03,Elliottstad,Cambodia,5,0,4624.08
+4266,Laptop,Electronics,10,349.98,2025-09-04,Alisontown,Niue,3,0,3499.8
+9232,Headphones,Gadgets,10,1503.98,2025-05-07,Brendamouth,Ethiopia,1,0,15039.8
+5723,Phone,Gadgets,9,1877.53,2025-05-26,New Sherry,Egypt,3,0,16897.77
+2994,Headphones,Accessories,4,1040.44,2025-03-03,North Jonathan,Mozambique,3,0,4161.76
+1653,Tablet,Gadgets,8,671.26,2024-12-05,East Edwardstad,Mayotte,5,0,5370.08
+3637,Monitor,Electronics,1,1942.05,2024-12-03,South Leahmouth,Bangladesh,4,0,1942.05
+6763,Headphones,Gadgets,8,751.1,2024-11-21,North Jakeport,Svalbard & Jan Mayen Islands,3,0,6008.8
+7476,Tablet,Electronics,5,1243.04,2025-09-13,Paceton,Uganda,2,1,6215.2
