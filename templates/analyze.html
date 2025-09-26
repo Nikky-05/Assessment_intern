@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row g-4">
+  <!-- DATASET + QUALITY -->
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="h5 mb-3">Dataset</h2>
+        {% if data_info or quality %}
+          <ul class="mb-2">
+            <li><strong>Original records (uploaded):</strong>
+              {{ quality.original_rows if quality and quality.original_rows is not none else (data_info.original_records if data_info and data_info.original_records is not none else "—") }}
+            </li>
+            <li><strong>Usable records (after cleaning):</strong>
+              {{ quality.usable_rows if quality and quality.usable_rows is not none else (data_info.usable_records if data_info and data_info.usable_records is not none else "—") }}
+            </li>
+            <li><strong>Dropped rows:</strong>
+              {% if quality and quality.dropped_rows is not none %}
+                {{ quality.dropped_rows }}
+              {% elif data_info and data_info.original_records is not none and data_info.usable_records is not none %}
+                {{ data_info.original_records - data_info.usable_records }}
+              {% else %}
+                —
+              {% endif %}
+            </li>
+            <li><strong>Unique customers (usable):</strong>
+              {{ data_info.unique_customers if data_info and data_info.unique_customers is not none else "—" }}
+            </li>
+            <li><strong>Date range (parsed):</strong>
+              {{ data_info.date_range if data_info and data_info.date_range else "—" }}
+            </li>
+            <li><strong>Total revenue (raw):</strong>
+              {% if data_info and data_info.total_revenue is not none %}
+                {{ "{:,.2f}".format(data_info.total_revenue) }}
+              {% else %}—{% endif %}
+            </li>
+          </ul>
+
+          {% if quality %}
+          <hr>
+          <h3 class="h6 mb-2">Data Quality (reasons rows were dropped)</h3>
+          <ul class="mb-0">
+            <li>Missing/empty <code>customer_id</code>:
+              <strong>{{ quality.missing_customer_id }}</strong>
+            </li>
+            <li>Invalid/blank <code>transaction_date</code>:
+              <strong>{{ quality.invalid_date }}</strong>
+            </li>
+            <li>Missing <code>amount</code>:
+              <strong>{{ quality.missing_amount }}</strong>
+            </li>
+            <li>Negative <code>amount</code>:
+              <strong>{{ quality.negative_amount }}</strong>
+            </li>
+          </ul>
+          {% endif %}
+        {% else %}
+          <p class="text-muted mb-0">No dataset info available.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- RFM ACTIONS & STATS -->
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="h5 mb-3">RFM</h2>
+        <form method="post" class="mb-2">
+          <input type="hidden" name="action" value="calculate_rfm">
+          <button class="btn btn-primary">Calculate RFM</button>
+        </form>
+
+        {% if rfm_stats %}
+          <div class="row">
+            <div class="col-6">
+              <ul class="mb-2">
+                <li><strong>Recency mean:</strong> {{ rfm_stats.recency_mean }}</li>
+                <li><strong>Frequency mean:</strong> {{ rfm_stats.frequency_mean }}</li>
+                <li><strong>Monetary mean:</strong> {{ rfm_stats.monetary_mean }}</li>
+              </ul>
+            </div>
+            <div class="col-6">
+              <ul class="mb-2">
+                <li><strong>Total customers (RFM):</strong> {{ rfm_stats.total_customers }}</li>
+              </ul>
+            </div>
+          </div>
+
+          {% if segment_dist %}
+            <h3 class="h6 mt-2">Segments</h3>
+            <ul class="mb-0">
+              {% for seg, cnt in segment_dist.items() %}
+                <li>{{ seg }}: <strong>{{ cnt }}</strong></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- RFM PREVIEW TABLE -->
+  {% if rfm_preview is not none %}
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="h6 mb-3">RFM Preview</h2>
+        <div class="table-responsive">
+          <table class="table table-sm table-striped align-middle">
+            <thead class="table-light">
+              <tr>
+                {% for c in rfm_preview.columns %}
+                  <th>{{ c }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for _, row in rfm_preview.iterrows() %}
+              <tr>
+                {% for c in rfm_preview.columns %}
+                  <td>{{ row[c] }}</td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-muted mb-0">Showing first {{ rfm_preview.shape[0] }} rows.</p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- CLUSTERING FORM -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="h5 mb-3">Clustering</h2>
+        <form method="post" class="row g-3">
+          <input type="hidden" name="action" value="cluster">
+
+          <div class="col-md-3">
+            <label class="form-label">Algorithm</label>
+            <select class="form-select" name="algorithm">
+              <option value="kmeans" selected>K-Means</option>
+              <option value="dbscan">DBSCAN</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">K (K-Means)</label>
+            <input type="number" class="form-control" name="n_clusters" value="3" min="2" max="12">
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">DBSCAN eps</label>
+            <input type="number" step="0.01" class="form-control" name="eps" value="0.5">
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">DBSCAN min_samples</label>
+            <input type="number" class="form-control" name="min_samples" value="5" min="1">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label d-block mb-1">Features</label>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="features" value="Recency" checked>
+              <label class="form-check-label">Recency</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="features" value="Frequency" checked>
+              <label class="form-check-label">Frequency</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="features" value="Monetary" checked>
+              <label class="form-check-label">Monetary</label>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <button class="btn btn-primary">Run Clustering</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLUSTER SUMMARY + DOWNLOAD + PLOT -->
+  {% if cluster_summary is not none %}
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="h6 mb-3">Cluster Summary (means)</h2>
+        <div class="table-responsive">
+          <table class="table table-sm table-striped align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Cluster</th>
+                <th>Recency</th>
+                <th>Frequency</th>
+                <th>Monetary</th>
+                <th>Customers</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for idx, row in cluster_summary.iterrows() %}
+              <tr>
+                <td>{{ idx }}</td>
+                <td>{{ row['Recency'] }}</td>
+                <td>{{ row['Frequency'] }}</td>
+                <td>{{ row['Monetary'] }}</td>
+                <td>{{ row['Customers'] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+          <form method="post">
+            <input type="hidden" name="action" value="export_csv">
+            <button class="btn btn-outline-primary btn-sm">Download CSV</button>
+          </form>
+          <form method="post">
+            <input type="hidden" name="action" value="export_xlsx">
+            <button class="btn btn-outline-secondary btn-sm">Download Excel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="h6 mb-3">Cluster Plot (PCA 2D)</h2>
+        {% if plot_url %}
+          <img src="{{ plot_url }}" class="img-fluid border rounded" alt="Cluster plot">
+        {% else %}
+          <p class="text-muted mb-0">Run clustering to view the plot.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

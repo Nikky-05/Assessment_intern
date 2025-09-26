@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="p-4 border rounded-3">
+      <h1 class="h3 mb-3">Customer Behavior Segmentation (RFM + Clustering)</h1>
+      <p class="text-muted">
+        Upload transactions, compute RFM (Recency, Frequency, Monetary),
+        cluster customers (K-Means or DBSCAN), view plots and summaries,
+        and download the clustered dataset — all without JavaScript.
+      </p>
+      <a class="btn btn-primary" href="{{ url_for('upload') }}">Get Started</a>
+      <a class="btn btn-outline-secondary" href="{{ url_for('analyze') }}">Go to Analyze</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
