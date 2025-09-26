@@ -77,7 +77,9 @@ dummy_users = [
     {'username': 'kevin_jackson', 'email': 'kevin@example.com', 'phone': '+1234567802'},
     {'username': 'laura_white', 'email': 'laura@example.com', 'phone': '+1234567803'},
     {'username': 'mike_harris', 'email': 'mike@example.com', 'phone': '+1234567804'},
-    {'username': 'nancy_clark', 'email': 'nancy@example.com', 'phone': '+1234567805'}
+    {'username': 'nancy_clark', 'email': 'nancy@example.com', 'phone': '+1234567805'},
+    {'username': 'samruddhi', 'email': 'samruddhinathile@gmail.com', 'phone': '+917249430984'},
+    {'username': 'vanshika', 'email': 'vanshikarpatel@gmail.com', 'phone': '+919730211941'}
 ]
 
 @app.route('/')
