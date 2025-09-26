@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title">Upload Dataset (CSV/Excel)</h5>
+    <form method="post" enctype="multipart/form-data">
+      <div class="mb-3">
+        <input type="file" name="file" class="form-control" required />
+        <div class="form-text">Required columns: customer_id, transaction_date, amount</div>
+      </div>
+      <button type="submit" class="btn btn-primary">Predict Clusters</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
