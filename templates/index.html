@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Home - User Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">Welcome to User Management System</h1>
+            <p class="lead">A simple web application for user registration, login, and messaging.</p>
+            <hr class="my-4">
+            <p>Get started by creating an account or logging in to access the dashboard.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <a class="btn btn-primary btn-lg me-md-2" href="{{ url_for('register') }}" role="button">Register</a>
+                <a class="btn btn-outline-primary btn-lg" href="{{ url_for('login') }}" role="button">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

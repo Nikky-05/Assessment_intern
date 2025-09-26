@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - User Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Dashboard</h2>
+        <p>Welcome, {{ current_user.username }}! Here you can view user data and send messages.</p>
+        
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Message</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>
+                            <input type="text" class="form-control form-control-sm" 
+                                   id="message_{{ loop.index }}" 
+                                   placeholder="Type your message here..." 
+                                   maxlength="500">
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-success" 
+                                        onclick="sendEmail('{{ user.email }}', {{ loop.index }})">
+                                    Email
+                                </button>
+                                <button type="button" class="btn btn-primary" 
+                                        onclick="sendSMS('{{ user.phone }}', {{ loop.index }})">
+                                    Mobile
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden forms for message sending -->
+<form id="emailForm" method="POST" action="{{ url_for('send_email') }}" style="display: none;">
+    <input type="hidden" name="email" id="emailRecipient">
+    <input type="hidden" name="message" id="emailMessage">
+</form>
+
+<form id="smsForm" method="POST" action="{{ url_for('send_sms') }}" style="display: none;">
+    <input type="hidden" name="phone" id="smsRecipient">
+    <input type="hidden" name="message" id="smsMessage">
+</form>
+
+<script>
+function sendEmail(email, rowIndex) {
+    const message = document.getElementById('message_' + rowIndex).value;
+    if (!message.trim()) {
+        alert('Please enter a message before sending.');
+        return;
+    }
+    
+    document.getElementById('emailRecipient').value = email;
+    document.getElementById('emailMessage').value = message;
+    document.getElementById('emailForm').submit();
+}
+
+function sendSMS(phone, rowIndex) {
+    const message = document.getElementById('message_' + rowIndex).value;
+    if (!message.trim()) {
+        alert('Please enter a message before sending.');
+        return;
+    }
+    
+    document.getElementById('smsRecipient').value = phone;
+    document.getElementById('smsMessage').value = message;
+    document.getElementById('smsForm').submit();
+}
+</script>
+{% endblock %}
