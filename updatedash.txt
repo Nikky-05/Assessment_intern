@@ -1,0 +1,716 @@
+# # dashboard_no_bg_with_border.py
+# import pandas as pd
+# import numpy as np
+# from dash import Dash, dcc, html, Input, Output, callback
+# import plotly.express as px
+
+# # ------------------ Load & Clean ------------------
+# file_path = "cleaned_sales_data.csv"
+# df = pd.read_csv(file_path)
+# df = df.drop_duplicates()
+# df['PurchaseDate'] = pd.to_datetime(df['PurchaseDate'], errors='coerce')
+# df['Quantity'] = pd.to_numeric(df['Quantity'], errors='coerce').fillna(0).astype(int)
+# df['Price'] = pd.to_numeric(df['Price'], errors='coerce').fillna(0.0)
+# df['FeedbackScore'] = pd.to_numeric(df['FeedbackScore'], errors='coerce')
+# df['FeedbackScore'] = df['FeedbackScore'].fillna(df['FeedbackScore'].median())
+# df['Returned'] = df['Returned'].map(
+#     {True: True, 'True': True, 'true': True, 'Yes': True, 'Y': True,
+#      False: False, 'False': False, 'false': False, 'No': False, 'N': False}
+# ).astype('boolean')
+# df['Sales'] = df['Quantity'] * df['Price']
+# df['Year'] = df['PurchaseDate'].dt.year
+# df['Month'] = df['PurchaseDate'].dt.month
+# df['MonthName'] = df['PurchaseDate'].dt.strftime('%Y-%m')
+# df['Weekday'] = df['PurchaseDate'].dt.day_name()
+
+# # Get unique countries for dropdown
+# countries = ['All Countries'] + sorted(df['Country'].unique().tolist())
+
+# # ------------------ Dash App ------------------
+# app = Dash(__name__)
+# app.title = "Sales Dashboard"
+
+# CARD_STYLE = {
+#     'padding': '20px',
+#     'border-radius': '15px',
+#     'box-shadow': '0 8px 20px rgba(0,0,0,0.3)',
+#     'color': 'white',
+#     'textAlign': 'center',
+#     'margin': '10px',
+#     'flex': '1',
+#     'minWidth': '180px'
+# }
+
+# CHART_CARD_STYLE = {
+#     'padding': '15px',
+#     'border-radius': '15px',
+#     'border': '2px solid #ffffff',
+#     'margin': '15px',
+#     'backgroundColor': 'transparent'
+# }
+
+# # Function to remove chart background
+# def transparent_chart(fig):
+#     fig.update_layout(
+#         plot_bgcolor='rgba(0,0,0,0)',
+#         paper_bgcolor='rgba(0,0,0,0)',
+#         font_color='white',
+#         title_font_color='white',
+#         legend_font_color='white'
+#     )
+#     return fig
+
+# app.layout = html.Div(style={
+#         'background': 'linear-gradient(135deg, #667eea, #764ba2)',
+#         'minHeight': '100vh',
+#         'padding': '20px',
+#         'font-family': 'Arial, sans-serif'
+#     }, children=[
+
+#     html.H1("📊 Sales Dashboard", style={
+#         'textAlign':'center', 
+#         'color':'white', 
+#         'margin-bottom':'20px', 
+#         'text-shadow':'2px 2px 4px rgba(0,0,0,0.3)'
+#     }),
+
+#     # Country Selection Dropdown
+#     html.Div(style={'textAlign': 'center', 'margin-bottom': '30px'}, children=[
+#         html.Label("Select Country:", style={
+#             'color': 'white', 
+#             'fontSize': '18px', 
+#             'fontWeight': 'bold',
+#             'margin-right': '10px'
+#         }),
+#         dcc.Dropdown(
+#             id='country-dropdown',
+#             options=[{'label': country, 'value': country} for country in countries],
+#             value='All Countries',
+#             style={
+#                 'width': '300px',
+#                 'display': 'inline-block',
+#                 'backgroundColor': 'rgba(255,255,255,0.9)',
+#                 'borderRadius': '5px'
+#             },
+#             clearable=False
+#         )
+#     ]),
+
+#     # KPI Cards
+#     html.Div(id='kpi-cards', style={'display':'flex', 'justifyContent':'space-around', 'flex-wrap':'wrap'}, children=[
+#         html.Div(style={**CARD_STYLE, 'background':'linear-gradient(45deg, #1abc9c, #16a085)'}, children=[
+#             html.H3("Total Sales"), html.H2(id="total-sales-kpi")
+#         ]),
+#         html.Div(style={**CARD_STYLE, 'background':'linear-gradient(45deg, #3498db, #2980b9)'}, children=[
+#             html.H3("Unique Customers"), html.H2(id="unique-customers-kpi")
+#         ]),
+#         html.Div(style={**CARD_STYLE, 'background':'linear-gradient(45deg, #f39c12, #d35400)'}, children=[
+#             html.H3("Avg Order Value"), html.H2(id="avg-order-value-kpi")
+#         ]),
+#         html.Div(style={**CARD_STYLE, 'background':'linear-gradient(45deg, #e74c3c, #c0392b)'}, children=[
+#             html.H3("Return Rate"), html.H2(id="return-rate-kpi")
+#         ]),
+#     ]),
+
+#     # Charts in grid layout
+#     html.Div(style={'display':'flex', 'flex-wrap':'wrap', 'justifyContent':'space-around'}, children=[
+
+#         html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 45%'}, children=[
+#             dcc.Graph(id="top-products-chart")
+#         ]),
+
+#         html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 45%'}, children=[
+#             dcc.Graph(id="category-pie-chart")
+#         ]),
+
+#         html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 45%'}, children=[
+#             dcc.Graph(id="monthly-trend-chart")
+#         ]),
+
+#         html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 45%'}, children=[
+#             dcc.Graph(id="top-cities-chart")
+#         ]),
+
+#         html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 45%'}, children=[
+#             dcc.Graph(id="heatmap-chart")
+#         ]),
+
+#         html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 45%'}, children=[
+#             dcc.Graph(id="correlation-chart")
+#         ]),
+
+#     ])
+# ])
+
+# # ------------------ Callbacks ------------------
+# @callback(
+#     [Output('total-sales-kpi', 'children'),
+#      Output('unique-customers-kpi', 'children'),
+#      Output('avg-order-value-kpi', 'children'),
+#      Output('return-rate-kpi', 'children'),
+#      Output('top-products-chart', 'figure'),
+#      Output('category-pie-chart', 'figure'),
+#      Output('monthly-trend-chart', 'figure'),
+#      Output('top-cities-chart', 'figure'),
+#      Output('heatmap-chart', 'figure'),
+#      Output('correlation-chart', 'figure')],
+#     [Input('country-dropdown', 'value')]
+# )
+# def update_dashboard(selected_country):
+#     # Filter data based on country selection
+#     if selected_country == 'All Countries':
+#         filtered_df = df
+#     else:
+#         filtered_df = df[df['Country'] == selected_country]
+    
+#     # Calculate KPIs
+#     total_sales = filtered_df['Sales'].sum()
+#     unique_customers = filtered_df['CustomerID'].nunique()
+#     avg_order_value = filtered_df.groupby('CustomerID')['Sales'].sum().mean() if unique_customers > 0 else 0
+#     return_rate = filtered_df['Returned'].mean() if len(filtered_df) > 0 else 0
+    
+#     # Format KPI values
+#     total_sales_formatted = f"${total_sales:,.2f}" if total_sales > 0 else "$0.00"
+#     unique_customers_formatted = f"{unique_customers}" if unique_customers > 0 else "0"
+#     avg_order_value_formatted = f"${avg_order_value:,.2f}" if avg_order_value > 0 else "$0.00"
+#     return_rate_formatted = f"{return_rate*100:.2f}%" if len(filtered_df) > 0 else "0.00%"
+    
+#     # Prepare chart data
+#     top_products = filtered_df.groupby('Product')['Sales'].sum().sort_values(ascending=False).head(10)
+#     top_categories = filtered_df.groupby('Category')['Sales'].sum().sort_values(ascending=False)
+    
+#     monthly_sales = filtered_df.groupby('MonthName')['Sales'].sum().reset_index()
+#     if not monthly_sales.empty:
+#         monthly_sales['MonthName'] = pd.to_datetime(monthly_sales['MonthName'])
+#         monthly_sales = monthly_sales.sort_values('MonthName')
+    
+#     city_sales = filtered_df.groupby('City')['Sales'].sum().sort_values(ascending=False).head(10)
+    
+#     # Create pivot table for heatmap (handle empty data)
+#     if not filtered_df.empty:
+#         pivot = filtered_df.pivot_table(
+#             index='Category', 
+#             columns='Weekday', 
+#             values='Sales',
+#             aggfunc='sum',    
+#             fill_value=0
+#         )
+#         # Ensure all weekdays are present
+#         weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+#         for day in weekdays:
+#             if day not in pivot.columns:
+#                 pivot[day] = 0
+#         pivot = pivot[weekdays]  # Reorder columns
+#     else:
+#         pivot = pd.DataFrame(0, index=filtered_df['Category'].unique(), columns=[
+#             'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+#         ])
+    
+#     # Correlation matrix
+#     num_cols = ['Quantity','Price','Sales','FeedbackScore']
+#     if not filtered_df.empty:
+#         corr = filtered_df[num_cols].corr()
+#     else:
+#         corr = pd.DataFrame(0, index=num_cols, columns=num_cols)
+    
+#     # Create charts
+#     # Top Products Chart
+#     if not top_products.empty:
+#         fig_products = px.bar(
+#             x=top_products.index, 
+#             y=top_products.values,
+#             title=f"Top 10 Products by Sales - {selected_country}",
+#             labels={'x': 'Product', 'y': 'Sales'},
+#             color=top_products.values
+#         )
+#     else:
+#         fig_products = px.bar(title=f"No Data Available for {selected_country}")
+    
+#     # Category Pie Chart
+#     if not top_categories.empty:
+#         fig_categories = px.pie(
+#             values=top_categories.values, 
+#             names=top_categories.index,
+#             title=f"Sales Share by Category - {selected_country}"
+#         )
+#     else:
+#         fig_categories = px.pie(title=f"No Data Available for {selected_country}")
+    
+#     # Monthly Trend Chart
+#     if not monthly_sales.empty:
+#         fig_monthly = px.line(
+#             monthly_sales, 
+#             x='MonthName', 
+#             y='Sales', 
+#             markers=True,
+#             title=f"Monthly Sales Trend - {selected_country}",
+#             color_discrete_sequence=["#ff0505"]
+#         )
+#     else:
+#         fig_monthly = px.line(title=f"No Data Available for {selected_country}")
+    
+#     # Top Cities Chart
+#     if not city_sales.empty:
+#         fig_cities = px.bar(
+#             x=city_sales.index, 
+#             y=city_sales.values,
+#             title=f"Top 10 Cities by Sales - {selected_country}",
+#             labels={'x': 'City', 'y': 'Sales'},
+#             color=city_sales.values
+#         )
+#     else:
+#         fig_cities = px.bar(title=f"No Data Available for {selected_country}")
+    
+#     # Heatmap Chart
+#     fig_heatmap = px.imshow(
+#         pivot, 
+#         text_auto=True, 
+#         aspect="auto",
+#         title=f"Category vs Weekday Sales Heatmap - {selected_country}",
+#         color_continuous_scale='Viridis'
+#     )
+    
+#     # Correlation Chart
+#     fig_correlation = px.imshow(
+#         corr, 
+#         text_auto=True, 
+#         color_continuous_scale='Cividis',
+#         title=f"Correlation Matrix - {selected_country}",
+#         zmin=-1,  # Set fixed scale for correlation
+#         zmax=1
+#     )
+    
+#     # Apply transparent theme to all charts
+#     charts = [fig_products, fig_categories, fig_monthly, fig_cities, fig_heatmap, fig_correlation]
+#     for chart in charts:
+#         transparent_chart(chart)
+    
+#     return (
+#         total_sales_formatted,
+#         unique_customers_formatted,
+#         avg_order_value_formatted,
+#         return_rate_formatted,
+#         fig_products,
+#         fig_categories,
+#         fig_monthly,
+#         fig_cities,
+#         fig_heatmap,
+#         fig_correlation
+#     )
+
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
+
+
+
+# enhanced_sales_dashboard.py
+import pandas as pd
+import numpy as np
+from dash import Dash, dcc, html, Input, Output, callback
+import plotly.express as px
+import plotly.graph_objects as go
+from datetime import datetime
+
+# ------------------ Load & Clean ------------------
+file_path = "cleaned_sales_data.csv"
+df = pd.read_csv(file_path)
+df = df.drop_duplicates()
+df['PurchaseDate'] = pd.to_datetime(df['PurchaseDate'], errors='coerce')
+df['Quantity'] = pd.to_numeric(df['Quantity'], errors='coerce').fillna(0).astype(int)
+df['Price'] = pd.to_numeric(df['Price'], errors='coerce').fillna(0.0)
+df['FeedbackScore'] = pd.to_numeric(df['FeedbackScore'], errors='coerce')
+df['FeedbackScore'] = df['FeedbackScore'].fillna(df['FeedbackScore'].median())
+df['Returned'] = df['Returned'].map(
+    {True: True, 'True': True, 'true': True, 'Yes': True, 'Y': True,
+     False: False, 'False': False, 'false': False, 'No': False, 'N': False}
+).astype('boolean')
+df['Sales'] = df['Quantity'] * df['Price']
+df['Year'] = df['PurchaseDate'].dt.year
+df['Month'] = df['PurchaseDate'].dt.month
+df['MonthName'] = df['PurchaseDate'].dt.strftime('%Y-%m')
+df['Weekday'] = df['PurchaseDate'].dt.day_name()
+df['Quarter'] = df['PurchaseDate'].dt.quarter
+
+# Get unique countries for dropdown
+countries = ['All Countries'] + sorted(df['Country'].unique().tolist())
+
+# ------------------ Dash App ------------------
+app = Dash(__name__)
+app.title = "Sales Analytics Dashboard"
+
+# Power BI inspired styling
+CARD_STYLE = {
+    'padding': '15px',
+    'border-radius': '8px',
+    'box-shadow': '0 4px 12px rgba(0,0,0,0.15)',
+    'color': 'white',
+    'textAlign': 'center',
+    'margin': '8px',
+    'flex': '1',
+    'minWidth': '200px',
+    'border': '1px solid rgba(255,255,255,0.1)',
+    'background': 'rgba(255,255,255,0.1)',
+    'backdropFilter': 'blur(10px)'
+}
+
+CHART_CARD_STYLE = {
+    'padding': '12px',
+    'border-radius': '8px',
+    'border': '1px solid rgba(255,255,255,0.2)',
+    'margin': '10px',
+    'backgroundColor': 'rgba(255,255,255,0.05)',
+    'boxShadow': '0 2px 8px rgba(0,0,0,0.1)'
+}
+
+# Function to remove chart background
+def transparent_chart(fig):
+    fig.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font_color='white',
+        title_font_color='white',
+        legend_font_color='white',
+        xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.1)'),
+        yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.1)'),
+        margin=dict(l=50, r=50, t=60, b=50)
+    )
+    return fig
+
+app.layout = html.Div(style={
+        'background': 'linear-gradient(135deg, #1e3c72, #2a5298)',
+        'minHeight': '100vh',
+        'padding': '20px',
+        'fontFamily': 'Segoe UI, Arial, sans-serif'
+    }, children=[
+
+    # Header Section
+    html.Div(style={'textAlign': 'center', 'marginBottom': '30px'}, children=[
+        html.H1("📊 Sales Analytics Dashboard", style={
+            'color': 'white', 
+            'marginBottom': '10px', 
+            'fontSize': '32px',
+            'fontWeight': '600'
+        }),
+        html.P("Interactive Sales Performance Analysis", style={
+            'color': 'rgba(255,255,255,0.8)',
+            'fontSize': '16px',
+            'marginBottom': '20px'
+        })
+    ]),
+
+    # Filters Section
+    html.Div(style={
+        'display': 'flex', 
+        'justifyContent': 'center', 
+        'gap': '20px',
+        'marginBottom': '30px',
+        'flexWrap': 'wrap'
+    }, children=[
+        html.Div(style={'textAlign': 'center'}, children=[
+            html.Label("Select Country:", style={
+                'color': 'white', 
+                'fontSize': '14px', 
+                'fontWeight': 'bold',
+                'marginBottom': '5px',
+                'display': 'block'
+            }),
+            dcc.Dropdown(
+                id='country-dropdown',
+                options=[{'label': country, 'value': country} for country in countries],
+                value='All Countries',
+                style={
+                    'width': '250px',
+                    'backgroundColor': 'rgba(255,255,255,0.9)',
+                    'borderRadius': '5px'
+                },
+                clearable=False
+            )
+        ])
+    ]),
+
+    # KPI Cards - First Row
+    html.Div(style={'display':'flex', 'justifyContent':'space-around', 'flex-wrap':'wrap', 'marginBottom': '20px'}, children=[
+        html.Div(style={**CARD_STYLE, 'background': 'linear-gradient(45deg, #00b894, #00a085)'}, children=[
+            html.Div("💰", style={'fontSize': '24px', 'marginBottom': '5px'}),
+            html.H3("Total Sales", style={'margin': '5px 0', 'fontSize': '14px', 'fontWeight': 'normal'}),
+            html.H2(id="total-sales-kpi", style={'margin': '5px 0', 'fontSize': '20px', 'fontWeight': 'bold'})
+        ]),
+        html.Div(style={**CARD_STYLE, 'background': 'linear-gradient(45deg, #0984e3, #0767b3)'}, children=[
+            html.Div("👥", style={'fontSize': '24px', 'marginBottom': '5px'}),
+            html.H3("Customers", style={'margin': '5px 0', 'fontSize': '14px', 'fontWeight': 'normal'}),
+            html.H2(id="unique-customers-kpi", style={'margin': '5px 0', 'fontSize': '20px', 'fontWeight': 'bold'})
+        ]),
+        html.Div(style={**CARD_STYLE, 'background': 'linear-gradient(45deg, #fdcb6e, #fdbb4a)'}, children=[
+            html.Div("📦", style={'fontSize': '24px', 'marginBottom': '5px'}),
+            html.H3("Avg Order Value", style={'margin': '5px 0', 'fontSize': '14px', 'fontWeight': 'normal'}),
+            html.H2(id="avg-order-value-kpi", style={'margin': '5px 0', 'fontSize': '20px', 'fontWeight': 'bold'})
+        ]),
+        html.Div(style={**CARD_STYLE, 'background': 'linear-gradient(45deg, #e17055, #d35400)'}, children=[
+            html.Div("🔄", style={'fontSize': '24px', 'marginBottom': '5px'}),
+            html.H3("Return Rate", style={'margin': '5px 0', 'fontSize': '14px', 'fontWeight': 'normal'}),
+            html.H2(id="return-rate-kpi", style={'margin': '5px 0', 'fontSize': '20px', 'fontWeight': 'bold'})
+        ]),
+        html.Div(style={**CARD_STYLE, 'background': 'linear-gradient(45deg, #6c5ce7, #5b4cdb)'}, children=[
+            html.Div("⭐", style={'fontSize': '24px', 'marginBottom': '5px'}),
+            html.H3("Avg Rating", style={'margin': '5px 0', 'fontSize': '14px', 'fontWeight': 'normal'}),
+            html.H2(id="avg-rating-kpi", style={'margin': '5px 0', 'fontSize': '20px', 'fontWeight': 'bold'})
+        ]),
+    ]),
+
+    # Charts Grid - First Row
+    html.Div(style={'display':'flex', 'flex-wrap':'wrap', 'justifyContent':'space-around'}, children=[
+        
+        # Sales Trend by Month
+        html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 60%', 'minWidth': '500px'}, children=[
+            dcc.Graph(id="sales-trend-chart")
+        ]),
+
+        # Product Category Distribution
+        html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 35%', 'minWidth': '350px'}, children=[
+            dcc.Graph(id="category-distribution-chart")
+        ]),
+    ]),
+
+    # Charts Grid - Second Row
+    html.Div(style={'display':'flex', 'flex-wrap':'wrap', 'justifyContent':'space-around'}, children=[
+        
+        # Top Products Performance
+        html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 45%', 'minWidth': '400px'}, children=[
+            dcc.Graph(id="top-products-chart")
+        ]),
+
+        # Sales by Weekday
+        html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 25%', 'minWidth': '300px'}, children=[
+            dcc.Graph(id="weekday-sales-chart")
+        ]),
+
+        # Customer Satisfaction
+        html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 25%', 'minWidth': '300px'}, children=[
+            dcc.Graph(id="satisfaction-chart")
+        ]),
+    ]),
+
+    # Charts Grid - Third Row
+    html.Div(style={'display':'flex', 'flex-wrap':'wrap', 'justifyContent':'space-around'}, children=[
+        
+        # Geographic Performance (Top Cities)
+        html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 50%', 'minWidth': '500px'}, children=[
+            dcc.Graph(id="geographic-performance-chart")
+        ]),
+
+        # Return Analysis
+        html.Div(style={**CHART_CARD_STYLE, 'flex':'1 1 45%', 'minWidth': '400px'}, children=[
+            dcc.Graph(id="return-analysis-chart")
+        ]),
+    ])
+])
+
+# ------------------ Callbacks ------------------
+@callback(
+    [Output('total-sales-kpi', 'children'),
+     Output('unique-customers-kpi', 'children'),
+     Output('avg-order-value-kpi', 'children'),
+     Output('return-rate-kpi', 'children'),
+     Output('avg-rating-kpi', 'children'),
+     Output('sales-trend-chart', 'figure'),
+     Output('category-distribution-chart', 'figure'),
+     Output('top-products-chart', 'figure'),
+     Output('weekday-sales-chart', 'figure'),
+     Output('satisfaction-chart', 'figure'),
+     Output('geographic-performance-chart', 'figure'),
+     Output('return-analysis-chart', 'figure')],
+    [Input('country-dropdown', 'value')]
+)
+def update_dashboard(selected_country):
+    # Filter data based on country selection
+    if selected_country == 'All Countries':
+        filtered_df = df
+        title_suffix = "All Countries"
+    else:
+        filtered_df = df[df['Country'] == selected_country]
+        title_suffix = selected_country
+    
+    # Calculate KPIs
+    total_sales = filtered_df['Sales'].sum()
+    unique_customers = filtered_df['CustomerID'].nunique()
+    avg_order_value = filtered_df.groupby('CustomerID')['Sales'].sum().mean() if unique_customers > 0 else 0
+    return_rate = filtered_df['Returned'].mean() if len(filtered_df) > 0 else 0
+    avg_rating = filtered_df['FeedbackScore'].mean() if len(filtered_df) > 0 else 0
+    
+    # Format KPI values
+    total_sales_formatted = f"${total_sales:,.0f}" if total_sales > 0 else "$0"
+    unique_customers_formatted = f"{unique_customers:,}" if unique_customers > 0 else "0"
+    avg_order_value_formatted = f"${avg_order_value:,.0f}" if avg_order_value > 0 else "$0"
+    return_rate_formatted = f"{return_rate*100:.1f}%" if len(filtered_df) > 0 else "0.0%"
+    avg_rating_formatted = f"{avg_rating:.1f}/5" if avg_rating > 0 else "0.0/5"
+    
+    # Chart 1: Sales Trend by Month (Area Chart)
+    monthly_data = filtered_df.groupby('MonthName').agg({
+        'Sales': 'sum',
+        'Quantity': 'sum',
+        'CustomerID': 'nunique'
+    }).reset_index()
+    
+    if not monthly_data.empty:
+        monthly_data['MonthName'] = pd.to_datetime(monthly_data['MonthName'])
+        monthly_data = monthly_data.sort_values('MonthName')
+        fig_trend = px.area(
+            monthly_data, 
+            x='MonthName', 
+            y='Sales',
+            title=f"📈 Monthly Sales Trend - {title_suffix}",
+            labels={'Sales': 'Sales Amount', 'MonthName': 'Month'}
+        )
+        fig_trend.update_traces(fill='tozeroy', line=dict(width=3))
+    else:
+        fig_trend = px.area(title=f"No Sales Data Available - {title_suffix}")
+    
+    # Chart 2: Category Distribution (Donut Chart)
+    category_data = filtered_df.groupby('Category').agg({
+        'Sales': 'sum',
+        'Quantity': 'sum'
+    }).reset_index()
+    
+    if not category_data.empty:
+        fig_category = px.pie(
+            category_data, 
+            values='Sales', 
+            names='Category',
+            title=f"📊 Sales by Category - {title_suffix}",
+            hole=0.4
+        )
+        fig_category.update_traces(textposition='inside', textinfo='percent+label')
+    else:
+        fig_category = px.pie(title=f"No Category Data - {title_suffix}")
+    
+    # Chart 3: Top Products Performance (Horizontal Bar Chart)
+    top_products = filtered_df.groupby('Product').agg({
+        'Sales': 'sum',
+        'Quantity': 'sum',
+        'CustomerID': 'nunique'
+    }).nlargest(8, 'Sales').reset_index()
+    
+    if not top_products.empty:
+        fig_products = px.bar(
+            top_products, 
+            y='Product', 
+            x='Sales',
+            title=f"🏆 Top Performing Products - {title_suffix}",
+            orientation='h',
+            color='Sales',
+            labels={'Sales': 'Total Sales', 'Product': ''}
+        )
+        fig_products.update_layout(yaxis={'categoryorder':'total ascending'})
+    else:
+        fig_products = px.bar(title=f"No Product Data - {title_suffix}")
+    
+    # Chart 4: Sales by Weekday (Bar Chart)
+    weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    weekday_data = filtered_df.groupby('Weekday').agg({
+        'Sales': 'sum',
+        'Quantity': 'sum'
+    }).reset_index()
+    weekday_data['Weekday'] = pd.Categorical(weekday_data['Weekday'], categories=weekday_order, ordered=True)
+    weekday_data = weekday_data.sort_values('Weekday')
+    
+    if not weekday_data.empty:
+        fig_weekday = px.bar(
+            weekday_data, 
+            x='Weekday', 
+            y='Sales',
+            title=f"📅 Sales by Weekday - {title_suffix}",
+            color='Sales',
+            labels={'Sales': 'Total Sales', 'Weekday': 'Day of Week'}
+        )
+    else:
+        fig_weekday = px.bar(title=f"No Weekday Data - {title_suffix}")
+    
+    # Chart 5: Customer Satisfaction (Gauge Chart)
+    rating_distribution = filtered_df['FeedbackScore'].value_counts().sort_index()
+    
+    if not rating_distribution.empty:
+        fig_satisfaction = go.Figure(go.Indicator(
+            mode = "gauge+number+delta",
+            value = avg_rating,
+            domain = {'x': [0, 1], 'y': [0, 1]},
+            title = {'text': f"⭐ Customer Satisfaction - {title_suffix}"},
+            gauge = {
+                'axis': {'range': [None, 5], 'tickwidth': 1, 'tickcolor': "white"},
+                'bar': {'color': "gold"},
+                'steps': [
+                    {'range': [0, 2], 'color': 'red'},
+                    {'range': [2, 4], 'color': 'yellow'},
+                    {'range': [4, 5], 'color': 'green'}
+                ]
+            }
+        ))
+    else:
+        fig_satisfaction = go.Figure()
+        fig_satisfaction.add_annotation(text=f"No Rating Data - {title_suffix}", x=0.5, y=0.5)
+    
+    # Chart 6: Geographic Performance (Top Cities)
+    city_data = filtered_df.groupby('City').agg({
+        'Sales': 'sum',
+        'CustomerID': 'nunique'
+    }).nlargest(10, 'Sales').reset_index()
+    
+    if not city_data.empty:
+        fig_geographic = px.bar(
+            city_data, 
+            x='Sales', 
+            y='City',
+            title=f"🌍 Top Cities by Sales - {title_suffix}",
+            orientation='h',
+            color='CustomerID',
+            labels={'Sales': 'Total Sales', 'City': '', 'CustomerID': 'Customers'}
+        )
+        fig_geographic.update_layout(yaxis={'categoryorder':'total ascending'})
+    else:
+        fig_geographic = px.bar(title=f"No Geographic Data - {title_suffix}")
+    
+    # Chart 7: Return Analysis
+    return_data = filtered_df.groupby('Product').agg({
+        'Returned': 'sum',
+        'Quantity': 'sum'
+    }).reset_index()
+    return_data['Return Rate'] = (return_data['Returned'] / return_data['Quantity'] * 100).fillna(0)
+    
+    if not return_data.empty:
+        fig_return = px.scatter(
+            return_data,
+            x='Quantity',
+            y='Return Rate',
+            size='Returned',
+            color='Product',
+            title=f"🔄 Return Analysis by Product - {title_suffix}",
+            labels={'Quantity': 'Units Sold', 'Return Rate': 'Return Rate (%)', 'Returned': 'Returns Count'}
+        )
+    else:
+        fig_return = px.scatter(title=f"No Return Data - {title_suffix}")
+    
+    # Apply transparent theme to all charts
+    plotly_charts = [fig_trend, fig_category, fig_products, fig_weekday, fig_geographic, fig_return]
+    for chart in plotly_charts:
+        transparent_chart(chart)
+    
+    # Apply styling to gauge chart
+    transparent_chart(fig_satisfaction)
+    
+    return (
+        total_sales_formatted,
+        unique_customers_formatted,
+        avg_order_value_formatted,
+        return_rate_formatted,
+        avg_rating_formatted,
+        fig_trend,
+        fig_category,
+        fig_products,
+        fig_weekday,
+        fig_satisfaction,
+        fig_geographic,
+        fig_return
+    )
+
+if __name__ == "__main__":
+    app.run(debug=True)

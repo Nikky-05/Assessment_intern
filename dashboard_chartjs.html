@@ -3,639 +3,834 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Dashboard - 3D Charts</title>
+    <title>Power BI Style Sales Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            min-height: 100vh;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #1e3c72 100%);
+            min-height: 100vh;
             padding: 20px;
-            font-family: Arial, sans-serif;
             color: white;
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
         }
 
-        .dashboard-title {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            font-size: 2.5em;
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .kpi-container {
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, rgba(30,60,114,0.9), rgba(42,82,152,0.9));
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .header-content {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
+        }
+
+        .header-title h1 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #00ffff, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-title p {
+            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+        }
+
+        .filter-section {
+            text-align: right;
+        }
+
+        .filter-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #countrySelect {
+            width: 280px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.95);
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
             margin-bottom: 30px;
         }
 
         .kpi-card {
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            color: white;
+            padding: 20px 15px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
             text-align: center;
-            margin: 10px;
-            flex: 1;
-            min-width: 180px;
-            transform: perspective(1000px) rotateX(5deg);
-            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .kpi-card:hover {
-            transform: perspective(1000px) rotateX(0deg) translateY(-5px);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
         }
 
+        .kpi-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .kpi-label {
+            margin: 8px 0;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .kpi-value {
+            margin: 8px 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        /* Chart Grid */
         .chart-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
+            display: grid;
             gap: 20px;
-        }
-
-        .chart-card {
-            padding: 15px;
-            border-radius: 15px;
-            border: 2px solid #ffffff;
-            background-color: transparent;
-            flex: 1 1 45%;
-            min-width: 300px;
             margin-bottom: 20px;
-            transform: perspective(1000px) rotateY(2deg);
-            transition: transform 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .chart-card:hover {
-            transform: perspective(1000px) rotateY(0deg) scale(1.02);
+        .chart-row-2 {
+            grid-template-columns: 2fr 1fr;
+        }
+
+        .chart-row-3 {
+            grid-template-columns: repeat(3, 1fr);
         }
 
         .chart-container {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        .chart-wrapper {
             position: relative;
             height: 300px;
-            width: 100%;
         }
 
-        .loading {
-            text-align: center;
-            padding: 50px;
-            font-size: 1.2em;
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .chart-row-2, .chart-row-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .filter-section {
+                text-align: center;
+                margin-top: 15px;
+            }
         }
 
-        .chart-3d-effect {
-            transform: perspective(1000px) rotateX(5deg) rotateY(2deg);
-            transition: transform 0.3s ease;
-        }
-
-        .chart-3d-effect:hover {
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+        @media (max-width: 768px) {
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .chart-container {
+                min-width: 100%;
+            }
+            
+            #countrySelect {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <h1 class="dashboard-title">📊 Sales Dashboard - 3D Charts</h1>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>📊 Power BI Sales Analytics</h1>
+                    <p>Enterprise Sales Performance Dashboard • Real-time Analytics</p>
+                </div>
+                <div class="filter-section">
+                    <label class="filter-label">COUNTRY FILTER</label>
+                    <select id="countrySelect" onchange="updateDashboard()">
+                        <option value="all">All Countries</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
-    <!-- KPI Cards -->
-    <div class="kpi-container">
-        <div class="kpi-card" style="background: linear-gradient(45deg, #1abc9c, #16a085)">
-            <h3>Total Sales</h3>
-            <h2 id="total-sales">$0.00</h2>
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+                <div class="kpi-icon">💰</div>
+                <div class="kpi-label">TOTAL SALES</div>
+                <div class="kpi-value" id="totalSales">$0</div>
+            </div>
+            <div class="kpi-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">
+                <div class="kpi-icon">👥</div>
+                <div class="kpi-label">CUSTOMERS</div>
+                <div class="kpi-value" id="uniqueCustomers">0</div>
+            </div>
+            <div class="kpi-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)">
+                <div class="kpi-icon">📦</div>
+                <div class="kpi-label">AVG ORDER VALUE</div>
+                <div class="kpi-value" id="avgOrderValue">$0</div>
+            </div>
+            <div class="kpi-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)">
+                <div class="kpi-icon">🔄</div>
+                <div class="kpi-label">RETURN RATE</div>
+                <div class="kpi-value" id="returnRate">0.0%</div>
+            </div>
+            <div class="kpi-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%)">
+                <div class="kpi-icon">⭐</div>
+                <div class="kpi-label">AVG RATING</div>
+                <div class="kpi-value" id="avgRating">0.0</div>
+            </div>
         </div>
-        <div class="kpi-card" style="background: linear-gradient(45deg, #3498db, #2980b9)">
-            <h3>Unique Customers</h3>
-            <h2 id="unique-customers">0</h2>
+
+        <!-- Charts Row 1 -->
+        <div class="chart-grid chart-row-2">
+            <div class="chart-container">
+                <div class="chart-title">📈 Monthly Sales Trend</div>
+                <div class="chart-wrapper">
+                    <canvas id="salesTrendChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">📊 Sales Distribution by Category</div>
+                <div class="chart-wrapper">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="kpi-card" style="background: linear-gradient(45deg, #f39c12, #d35400)">
-            <h3>Avg Order Value</h3>
-            <h2 id="avg-order-value">$0.00</h2>
+
+        <!-- Charts Row 2 -->
+        <div class="chart-grid chart-row-3">
+            <div class="chart-container">
+                <div class="chart-title">🏆 Top Performing Products</div>
+                <div class="chart-wrapper">
+                    <canvas id="productsChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">📅 Sales Performance by Weekday</div>
+                <div class="chart-wrapper">
+                    <canvas id="weekdayChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">⭐ Customer Satisfaction</div>
+                <div class="chart-wrapper">
+                    <canvas id="satisfactionChart"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="kpi-card" style="background: linear-gradient(45deg, #e74c3c, #c0392b)">
-            <h3>Return Rate</h3>
-            <h2 id="return-rate">0.00%</h2>
+
+        <!-- Charts Row 3 -->
+        <div class="chart-grid chart-row-2">
+            <div class="chart-container">
+                <div class="chart-title">🌍 Top Performing Cities</div>
+                <div class="chart-wrapper">
+                    <canvas id="citiesChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">🔄 Return Analysis</div>
+                <div class="chart-wrapper">
+                    <canvas id="returnAnalysisChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Charts Grid -->
-    <div class="chart-grid">
-        <div class="chart-card">
-            <h3>Top 10 Products by Sales - 3D Bars</h3>
-            <div class="chart-container chart-3d-effect">
-                <canvas id="top-products-chart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-card">
-            <h3>Sales Share by Category - 3D Pie</h3>
-            <div class="chart-container chart-3d-effect">
-                <canvas id="category-pie-chart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-card">
-            <h3>Monthly Sales Trend - 3D Line</h3>
-            <div class="chart-container chart-3d-effect">
-                <canvas id="monthly-trend-chart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-card">
-            <h3>Top 10 Cities by Sales - 3D Cylinders</h3>
-            <div class="chart-container chart-3d-effect">
-                <canvas id="city-sales-chart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-card">
-            <h3>Category vs Weekday - 3D Surface</h3>
-            <div class="chart-container chart-3d-effect">
-                <canvas id="heatmap-chart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-card">
-            <h3>Correlation Matrix - 3D Blocks</h3>
-            <div class="chart-container chart-3d-effect">
-                <canvas id="correlation-chart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div id="loading" class="loading">Loading data and generating 3D charts...</div>
 
     <script>
-        // Global variables to store processed data
-        let processedData = {};
+        // Complete sales data from the CSV
+        const salesData = [
+            {CustomerID:9123,Product:"Headphones",Category:"Accessories",Quantity:9,Price:1736.61,PurchaseDate:"2025-03-26",City:"Kristaborough",Country:"United Arab Emirates",FeedbackScore:5,Returned:1,Sales:15629.49},
+            {CustomerID:2497,Product:"Tablet",Category:"Gadgets",Quantity:10,Price:1138.14,PurchaseDate:"2025-02-24",City:"West Kyleville",Country:"Equatorial Guinea",FeedbackScore:3,Returned:0,Sales:11381.40},
+            {CustomerID:1497,Product:"Phone",Category:"Electronics",Quantity:6,Price:1357.51,PurchaseDate:"2025-04-21",City:"New Stephen",Country:"Samoa",FeedbackScore:5,Returned:0,Sales:8145.06},
+            {CustomerID:5419,Product:"Headphones",Category:"Gadgets",Quantity:9,Price:564.60,PurchaseDate:"2025-01-31",City:"Banksbury",Country:"Brazil",FeedbackScore:5,Returned:1,Sales:5081.40},
+            {CustomerID:1860,Product:"Headphones",Category:"Gadgets",Quantity:6,Price:809.27,PurchaseDate:"2025-05-02",City:"Bowenside",Country:"Saint Vincent and the Grenadines",FeedbackScore:4,Returned:0,Sales:4855.62},
+            {CustomerID:6792,Product:"Phone",Category:"Accessories",Quantity:8,Price:1412.24,PurchaseDate:"2025-04-11",City:"East Briannahaven",Country:"Saint Pierre and Miquelon",FeedbackScore:3,Returned:0,Sales:11297.92},
+            {CustomerID:6951,Product:"Laptop",Category:"Gadgets",Quantity:7,Price:684.96,PurchaseDate:"2025-09-13",City:"Jonesland",Country:"Antigua and Barbuda",FeedbackScore:4,Returned:0,Sales:4794.72},
+            {CustomerID:3273,Product:"Phone",Category:"Electronics",Quantity:10,Price:864.81,PurchaseDate:"2024-12-22",City:"East David",Country:"Djibouti",FeedbackScore:2,Returned:1,Sales:8648.10},
+            {CustomerID:4304,Product:"Phone",Category:"Accessories",Quantity:9,Price:696.20,PurchaseDate:"2025-03-14",City:"East Jillstad",Country:"Taiwan",FeedbackScore:4,Returned:1,Sales:6265.80},
+            {CustomerID:8099,Product:"Phone",Category:"Electronics",Quantity:5,Price:1606.54,PurchaseDate:"2025-04-25",City:"Gregorytown",Country:"Colombia",FeedbackScore:5,Returned:1,Sales:8032.70},
+            {CustomerID:6820,Product:"Laptop",Category:"Accessories",Quantity:3,Price:581.35,PurchaseDate:"2025-04-12",City:"Lindamouth",Country:"Togo",FeedbackScore:5,Returned:0,Sales:1744.05},
+            {CustomerID:7460,Product:"Phone",Category:"Electronics",Quantity:2,Price:1290.22,PurchaseDate:"2024-11-18",City:"Erikafort",Country:"Argentina",FeedbackScore:3,Returned:0,Sales:2580.44},
+            {CustomerID:8050,Product:"Monitor",Category:"Accessories",Quantity:9,Price:1273.45,PurchaseDate:"2025-09-20",City:"Seanfort",Country:"Eritrea",FeedbackScore:3,Returned:1,Sales:11461.05},
+            {CustomerID:2180,Product:"Headphones",Category:"Accessories",Quantity:1,Price:1989.95,PurchaseDate:"2025-01-06",City:"Vanessaborough",Country:"Swaziland",FeedbackScore:2,Returned:1,Sales:1989.95},
+            {CustomerID:5947,Product:"Tablet",Category:"Gadgets",Quantity:7,Price:170.69,PurchaseDate:"2025-03-21",City:"Port Gloriashire",Country:"Saint Martin",FeedbackScore:1,Returned:0,Sales:1194.83}
+        ];
 
-        // Enhanced 3D configuration
-        const chart3DConfig = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: 'white',
-                        font: {
-                            size: 12,
-                            weight: 'bold'
-                        }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    titleColor: '#ffffff',
-                    bodyColor: '#ffffff',
-                    borderColor: '#ffffff',
-                    borderWidth: 1,
-                    cornerRadius: 8,
-                    displayColors: true,
-                    callbacks: {
-                        label: function(context) {
-                            return `Value: ${context.raw.toLocaleString()}`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: { 
-                        color: 'white',
-                        font: { weight: 'bold' }
-                    },
-                    grid: { 
-                        color: 'rgba(255,255,255,0.2)',
-                        lineWidth: 1
-                    }
-                },
-                y: {
-                    ticks: { 
-                        color: 'white',
-                        font: { weight: 'bold' }
-                    },
-                    grid: { 
-                        color: 'rgba(255,255,255,0.2)',
-                        lineWidth: 1
-                    }
-                }
-            },
-            animation: {
-                duration: 2000,
-                easing: 'easeOutQuart'
-            }
-        };
+        // Chart instances
+        let charts = {};
 
-        // Create 3D gradient effects
-        function create3DGradient(ctx, colors, width, height) {
-            const gradient = ctx.createLinearGradient(0, 0, width, height);
-            colors.forEach((color, index) => {
-                gradient.addColorStop(index / (colors.length - 1), color);
+        // Initialize dashboard
+        function initDashboard() {
+            // Populate country dropdown
+            const countries = [...new Set(salesData.map(item => item.Country))].sort();
+            const countrySelect = document.getElementById('countrySelect');
+            
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                countrySelect.appendChild(option);
             });
-            return gradient;
+
+            // Create initial charts
+            updateDashboard();
         }
 
-        // Load and process CSV data
-        async function loadData() {
-            try {
-                const response = await fetch('cleaned_sales_data.csv');
-                const csvText = await response.text();
+        // Update dashboard based on country selection
+        function updateDashboard() {
+            const selectedCountry = document.getElementById('countrySelect').value;
+            const filteredData = selectedCountry === 'all' 
+                ? salesData 
+                : salesData.filter(item => item.Country === selectedCountry);
+
+            updateKPIs(filteredData);
+            updateCharts(filteredData, selectedCountry);
+        }
+
+        // Update KPI cards
+        function updateKPIs(data) {
+            if (data.length === 0) {
+                document.getElementById('totalSales').textContent = '$0';
+                document.getElementById('uniqueCustomers').textContent = '0';
+                document.getElementById('avgOrderValue').textContent = '$0';
+                document.getElementById('returnRate').textContent = '0.0%';
+                document.getElementById('avgRating').textContent = '0.0';
+                return;
+            }
+
+            const totalSales = data.reduce((sum, item) => sum + item.Sales, 0);
+            const uniqueCustomers = new Set(data.map(item => item.CustomerID)).size;
+            const avgOrderValue = totalSales / uniqueCustomers;
+            const returnRate = (data.filter(item => item.Returned).length / data.length) * 100;
+            const avgRating = data.reduce((sum, item) => sum + item.FeedbackScore, 0) / data.length;
+
+            document.getElementById('totalSales').textContent = `$${totalSales.toLocaleString()}`;
+            document.getElementById('uniqueCustomers').textContent = uniqueCustomers.toLocaleString();
+            document.getElementById('avgOrderValue').textContent = `$${avgOrderValue.toFixed(0)}`;
+            document.getElementById('returnRate').textContent = `${returnRate.toFixed(1)}%`;
+            document.getElementById('avgRating').textContent = avgRating.toFixed(1);
+        }
+
+        // Update all charts
+        function updateCharts(data, selectedCountry) {
+            const suffix = selectedCountry === 'all' ? 'All Countries' : selectedCountry;
+            
+            createSalesTrendChart(data, suffix);
+            createCategoryChart(data, suffix);
+            createProductsChart(data, suffix);
+            createWeekdayChart(data, suffix);
+            createSatisfactionChart(data, suffix);
+            createCitiesChart(data, suffix);
+            createReturnAnalysisChart(data, suffix);
+        }
+
+        // Chart creation functions
+        function createSalesTrendChart(data, suffix) {
+            const ctx = document.getElementById('salesTrendChart').getContext('2d');
+            
+            // Group by month
+            const monthlyData = {};
+            data.forEach(item => {
+                const date = new Date(item.PurchaseDate);
+                const monthYear = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
                 
-                return new Promise((resolve) => {
-                    Papa.parse(csvText, {
-                        header: true,
-                        dynamicTyping: true,
-                        skipEmptyLines: true,
-                        complete: function(results) {
-                            resolve(results.data);
-                        }
-                    });
-                });
-            } catch (error) {
-                console.error('Error loading CSV:', error);
-                return [];
+                if (!monthlyData[monthYear]) {
+                    monthlyData[monthYear] = 0;
+                }
+                monthlyData[monthYear] += item.Sales;
+            });
+
+            const labels = Object.keys(monthlyData).sort((a, b) => new Date(a) - new Date(b));
+            const salesData = labels.map(month => monthlyData[month]);
+
+            // Destroy existing chart if it exists
+            if (charts.salesTrend) {
+                charts.salesTrend.destroy();
             }
-        }
 
-        // Data processing functions (same as before)
-        function processData(rawData) {
-            const data = rawData.filter((row, index, self) => 
-                index === self.findIndex(r => JSON.stringify(r) === JSON.stringify(row))
-            );
-
-            data.forEach(row => {
-                row.PurchaseDate = new Date(row.PurchaseDate);
-                row.Quantity = parseInt(row.Quantity) || 0;
-                row.Price = parseFloat(row.Price) || 0;
-                row.FeedbackScore = parseFloat(row.FeedbackScore) || 0;
-                row.Sales = row.Quantity * row.Price;
-                row.Year = row.PurchaseDate.getFullYear();
-                row.Month = row.PurchaseDate.getMonth() + 1;
-                row.MonthName = `${row.Year}-${String(row.Month).padStart(2, '0')}`;
-                row.Weekday = row.PurchaseDate.toLocaleDateString('en-US', { weekday: 'long' });
-            });
-
-            const totalSales = data.reduce((sum, row) => sum + row.Sales, 0);
-            const uniqueCustomers = new Set(data.map(row => row.CustomerID)).size;
-            const customerSales = {};
-            data.forEach(row => {
-                customerSales[row.CustomerID] = (customerSales[row.CustomerID] || 0) + row.Sales;
-            });
-            const avgOrderValue = Object.values(customerSales).reduce((a, b) => a + b, 0) / uniqueCustomers;
-            const returnRate = data.filter(row => row.Returned === true || row.Returned === 'True').length / data.length;
-
-            const productSales = {};
-            data.forEach(row => {
-                productSales[row.Product] = (productSales[row.Product] || 0) + row.Sales;
-            });
-            const topProducts = Object.entries(productSales)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-
-            const categorySales = {};
-            data.forEach(row => {
-                categorySales[row.Category] = (categorySales[row.Category] || 0) + row.Sales;
-            });
-
-            const monthlySales = {};
-            data.forEach(row => {
-                monthlySales[row.MonthName] = (monthlySales[row.MonthName] || 0) + row.Sales;
-            });
-            const monthlyTrend = Object.entries(monthlySales)
-                .sort(([a], [b]) => a.localeCompare(b));
-
-            const citySales = {};
-            data.forEach(row => {
-                citySales[row.City] = (citySales[row.City] || 0) + row.Sales;
-            });
-            const topCities = Object.entries(citySales)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-
-            const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const categories = Object.keys(categorySales);
-            const heatmapData = categories.map(category => {
-                return weekdays.map(day => {
-                    return data.filter(row => row.Category === category && row.Weekday === day)
-                            .reduce((sum, row) => sum + row.Sales, 0);
-                });
-            });
-
-            const numData = data.map(row => ({
-                Quantity: row.Quantity,
-                Price: row.Price,
-                Sales: row.Sales,
-                FeedbackScore: row.FeedbackScore
-            })).filter(row => 
-                !isNaN(row.Quantity) && !isNaN(row.Price) && !isNaN(row.Sales) && !isNaN(row.FeedbackScore)
-            );
-
-            const correlationMatrix = calculateCorrelation(numData);
-
-            return {
-                totalSales,
-                uniqueCustomers,
-                avgOrderValue,
-                returnRate,
-                topProducts,
-                categorySales,
-                monthlyTrend,
-                topCities,
-                heatmapData,
-                correlationMatrix,
-                categories,
-                weekdays
-            };
-        }
-
-        function calculateCorrelation(data) {
-            const fields = ['Quantity', 'Price', 'Sales', 'FeedbackScore'];
-            const matrix = [];
-            
-            for (let i = 0; i < fields.length; i++) {
-                matrix[i] = [];
-                for (let j = 0; j < fields.length; j++) {
-                    if (i === j) {
-                        matrix[i][j] = 1;
-                    } else {
-                        const x = data.map(row => row[fields[i]]);
-                        const y = data.map(row => row[fields[j]]);
-                        matrix[i][j] = pearsonCorrelation(x, y);
-                    }
-                }
-            }
-            
-            return matrix;
-        }
-
-        function pearsonCorrelation(x, y) {
-            const n = x.length;
-            const sum_x = x.reduce((a, b) => a + b, 0);
-            const sum_y = y.reduce((a, b) => a + b, 0);
-            const sum_xy = x.reduce((a, b, i) => a + b * y[i], 0);
-            const sum_x2 = x.reduce((a, b) => a + b * b, 0);
-            const sum_y2 = y.reduce((a, b) => a + b * b, 0);
-            
-            const numerator = n * sum_xy - sum_x * sum_y;
-            const denominator = Math.sqrt((n * sum_x2 - sum_x * sum_x) * (n * sum_y2 - sum_y * sum_y));
-            
-            return denominator === 0 ? 0 : numerator / denominator;
-        }
-
-        // 3D Chart creation functions
-        function createTopProductsChart() {
-            const ctx = document.getElementById('top-products-chart').getContext('2d');
-            const labels = processedData.topProducts.map(item => item[0]);
-            const data = processedData.topProducts.map(item => item[1]);
-
-            return new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Sales $',
-                        data: data,
-                        backgroundColor: labels.map((_, i) => 
-                            create3DGradient(ctx, ['#3498db', '#2980b9', '#1f618d'], 100, 300)
-                        ),
-                        borderColor: 'white',
-                        borderWidth: 2,
-                        borderRadius: 8,
-                        borderSkipped: false,
-                    }]
-                },
-                options: {
-                    ...chart3DConfig,
-                    plugins: {
-                        ...chart3DConfig.plugins,
-                        tooltip: {
-                            ...chart3DConfig.plugins.tooltip,
-                            callbacks: {
-                                label: function(context) {
-                                    return `Sales: $${context.raw.toLocaleString()}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createCategoryPieChart() {
-            const ctx = document.getElementById('category-pie-chart').getContext('2d');
-            const labels = Object.keys(processedData.categorySales);
-            const data = Object.values(processedData.categorySales);
-
-            const colors3D = [
-                'rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)',
-                'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)', 'rgba(255, 159, 64, 0.8)',
-                'rgba(199, 199, 199, 0.8)', 'rgba(83, 102, 255, 0.8)', 'rgba(40, 159, 64, 0.8)'
-            ];
-
-            return new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors3D,
-                        borderColor: 'white',
-                        borderWidth: 3,
-                        hoverOffset: 20,
-                        weight: 0.5
-                    }]
-                },
-                options: {
-                    ...chart3DConfig,
-                    cutout: '50%',
-                    plugins: {
-                        ...chart3DConfig.plugins,
-                        tooltip: {
-                            ...chart3DConfig.plugins.tooltip,
-                            callbacks: {
-                                label: function(context) {
-                                    const value = context.raw;
-                                    const total = data.reduce((a, b) => a + b, 0);
-                                    const percentage = ((value / total) * 100).toFixed(1);
-                                    return `${context.label}: $${value.toLocaleString()} (${percentage}%)`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createMonthlyTrendChart() {
-            const ctx = document.getElementById('monthly-trend-chart').getContext('2d');
-            const labels = processedData.monthlyTrend.map(item => item[0]);
-            const data = processedData.monthlyTrend.map(item => item[1]);
-
-            return new Chart(ctx, {
+            charts.salesTrend = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Sales Trend',
-                        data: data,
-                        borderColor: '#ff0505',
-                        backgroundColor: create3DGradient(ctx, ['rgba(255, 5, 5, 0.3)', 'rgba(255, 5, 5, 0.1)'], 0, 300),
-                        borderWidth: 4,
+                        label: 'Sales',
+                        data: salesData,
+                        borderColor: '#00ffff',
+                        backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                        borderWidth: 3,
                         fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#ff0505',
-                        pointBorderWidth: 3,
-                        pointRadius: 6,
-                        pointHoverRadius: 10
+                        tension: 0.4
                     }]
                 },
                 options: {
-                    ...chart3DConfig,
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
-                        ...chart3DConfig.plugins,
-                        tooltip: {
-                            ...chart3DConfig.plugins.tooltip,
-                            callbacks: {
-                                label: function(context) {
-                                    return `Sales: $${context.raw.toLocaleString()}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createCitySalesChart() {
-            const ctx = document.getElementById('city-sales-chart').getContext('2d');
-            const labels = processedData.topCities.map(item => item[0]);
-            const data = processedData.topCities.map(item => item[1]);
-
-            return new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'City Sales',
-                        data: data,
-                        backgroundColor: labels.map((_, i) => 
-                            create3DGradient(ctx, ['#e74c3c', '#c0392b', '#a93226'], 100, 300)
-                        ),
-                        borderColor: 'white',
-                        borderWidth: 2,
-                        borderRadius: 12,
-                        borderSkipped: false,
-                    }]
-                },
-                options: {
-                    ...chart3DConfig,
-                    indexAxis: 'y',
-                    plugins: {
-                        ...chart3DConfig.plugins,
-                        tooltip: {
-                            ...chart3DConfig.plugins.tooltip,
-                            callbacks: {
-                                label: function(context) {
-                                    return `Sales: $${context.raw.toLocaleString()}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createHeatmapChart() {
-            const ctx = document.getElementById('heatmap-chart').getContext('2d');
-            const datasets = processedData.categories.map((category, index) => ({
-                label: category,
-                data: processedData.heatmapData[index],
-                backgroundColor: `hsla(${index * 360 / processedData.categories.length}, 70%, 50%, 0.7)`,
-                borderColor: 'white',
-                borderWidth: 1,
-                borderRadius: 5
-            }));
-
-            return new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: processedData.weekdays,
-                    datasets: datasets
-                },
-                options: {
-                    ...chart3DConfig,
+                        title: {
+                            display: true,
+                            text: `📈 Monthly Sales Trend - ${suffix}`,
+                            color: 'white',
+                            font: { size: 14 }
+                        },
+                        legend: { display: false }
+                    },
                     scales: {
                         x: {
-                            stacked: true,
-                            ...chart3DConfig.scales.x
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: 'white' }
                         },
                         y: {
-                            stacked: true,
-                            ...chart3DConfig.scales.y
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { 
+                                color: 'white',
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
                         }
                     }
                 }
             });
         }
 
-        function createCorrelationChart() {
-            const ctx = document.getElementById('correlation-chart').getContext('2d');
-            const labels = ['Quantity', 'Price', 'Sales', 'FeedbackScore'];
+        function createCategoryChart(data, suffix) {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            
+            const categoryData = {};
+            data.forEach(item => {
+                if (!categoryData[item.Category]) {
+                    categoryData[item.Category] = 0;
+                }
+                categoryData[item.Category] += item.Sales;
+            });
 
-            return new Chart(ctx, {
-                type: 'bar',
+            // Destroy existing chart if it exists
+            if (charts.category) {
+                charts.category.destroy();
+            }
+
+            charts.category = new Chart(ctx, {
+                type: 'doughnut',
                 data: {
-                    labels: labels,
-                    datasets: labels.map((label, i) => ({
-                        label: label,
-                        data: processedData.correlationMatrix[i],
-                        backgroundColor: `hsla(${i * 90}, 70%, 50%, 0.8)`,
-                        borderColor: 'white',
-                        borderWidth: 2,
-                        borderRadius: 8
-                    }))
+                    labels: Object.keys(categoryData),
+                    datasets: [{
+                        data: Object.values(categoryData),
+                        backgroundColor: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'],
+                        borderWidth: 0
+                    }]
                 },
                 options: {
-                    ...chart3DConfig,
-                    scales: {
-                        y: {
-                            min: -1,
-                            max: 1,
-                            ...chart3DConfig.scales.y
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `📊 Sales by Category - ${suffix}`,
+                            color: 'white',
+                            font: { size: 14 }
+                        },
+                        legend: {
+                            position: 'right',
+                            labels: { color: 'white' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: $${value.toLocaleString()} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }
             });
         }
 
-        // Update KPI cards
-        function updateKPIs() {
-            document.getElementById('total-sales').textContent = `$${processedData.totalSales.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('unique-customers').textContent = processedData.uniqueCustomers.toLocaleString();
-            document.getElementById('avg-order-value').textContent = `$${processedData.avgOrderValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('return-rate').textContent = `${(processedData.returnRate * 100).toFixed(2)}%`;
+        function createProductsChart(data, suffix) {
+            const ctx = document.getElementById('productsChart').getContext('2d');
+            
+            const productData = {};
+            data.forEach(item => {
+                if (!productData[item.Product]) {
+                    productData[item.Product] = 0;
+                }
+                productData[item.Product] += item.Sales;
+            });
+
+            const sortedProducts = Object.entries(productData)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+
+            // Destroy existing chart if it exists
+            if (charts.products) {
+                charts.products.destroy();
+            }
+
+            charts.products = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedProducts.map(p => p[0]),
+                    datasets: [{
+                        label: 'Sales',
+                        data: sortedProducts.map(p => p[1]),
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `🏆 Top Products - ${suffix}`,
+                            color: 'white',
+                            font: { size: 14 }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { 
+                                color: 'white',
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: 'white' }
+                        }
+                    }
+                }
+            });
         }
 
-        // Initialize dashboard
-        async function initializeDashboard() {
-            const rawData = await loadData();
-            processedData = processData(rawData);
+        function createWeekdayChart(data, suffix) {
+            const ctx = document.getElementById('weekdayChart').getContext('2d');
             
-            updateKPIs();
-            
-            createTopProductsChart();
-            createCategoryPieChart();
-            createMonthlyTrendChart();
-            createCitySalesChart();
-            createHeatmapChart();
-            createCorrelationChart();
-            
-            document.getElementById('loading').style.display = 'none';
+            const weekdayOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const weekdayData = {};
+            weekdayOrder.forEach(day => weekdayData[day] = 0);
+
+            data.forEach(item => {
+                const date = new Date(item.PurchaseDate);
+                const dayName = weekdayOrder[date.getDay()];
+                weekdayData[dayName] += item.Sales;
+            });
+
+            // Destroy existing chart if it exists
+            if (charts.weekday) {
+                charts.weekday.destroy();
+            }
+
+            charts.weekday = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: weekdayOrder,
+                    datasets: [{
+                        label: 'Sales',
+                        data: weekdayOrder.map(day => weekdayData[day]),
+                        backgroundColor: 'rgba(250, 112, 154, 0.8)',
+                        borderColor: 'rgba(250, 112, 154, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `📅 Sales by Weekday - ${suffix}`,
+                            color: 'white',
+                            font: { size: 14 }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: 'white' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { 
+                                color: 'white',
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
 
-        // Start the dashboard
-        initializeDashboard();
+        function createSatisfactionChart(data, suffix) {
+            const ctx = document.getElementById('satisfactionChart').getContext('2d');
+            
+            const ratingData = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+            data.forEach(item => {
+                ratingData[item.FeedbackScore]++;
+            });
+
+            // Destroy existing chart if it exists
+            if (charts.satisfaction) {
+                charts.satisfaction.destroy();
+            }
+
+            charts.satisfaction = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+                    datasets: [{
+                        label: 'Number of Ratings',
+                        data: Object.values(ratingData),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(255, 159, 64, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(54, 162, 235, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `⭐ Customer Satisfaction - ${suffix}`,
+                            color: 'white',
+                            font: { size: 14 }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: 'white' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: 'white' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCitiesChart(data, suffix) {
+            const ctx = document.getElementById('citiesChart').getContext('2d');
+            
+            const cityData = {};
+            data.forEach(item => {
+                if (!cityData[item.City]) {
+                    cityData[item.City] = 0;
+                }
+                cityData[item.City] += item.Sales;
+            });
+
+            const sortedCities = Object.entries(cityData)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            // Destroy existing chart if it exists
+            if (charts.cities) {
+                charts.cities.destroy();
+            }
+
+            charts.cities = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedCities.map(c => c[0]),
+                    datasets: [{
+                        label: 'Sales',
+                        data: sortedCities.map(c => c[1]),
+                        backgroundColor: 'rgba(79, 172, 254, 0.8)',
+                        borderColor: 'rgba(79, 172, 254, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `🌍 Top Cities - ${suffix}`,
+                            color: 'white',
+                            font: { size: 14 }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: 'white' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { 
+                                color: 'white',
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createReturnAnalysisChart(data, suffix) {
+            const ctx = document.getElementById('returnAnalysisChart').getContext('2d');
+            
+            const returnData = {Returned: 0, 'Not Returned': 0};
+            data.forEach(item => {
+                if (item.Returned) {
+                    returnData.Returned++;
+                } else {
+                    returnData['Not Returned']++;
+                }
+            });
+
+            // Destroy existing chart if it exists
+            if (charts.returnAnalysis) {
+                charts.returnAnalysis.destroy();
+            }
+
+            charts.returnAnalysis = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Returned', 'Not Returned'],
+                    datasets: [{
+                        data: [returnData.Returned, returnData['Not Returned']],
+                        backgroundColor: ['rgba(255, 99, 132, 0.8)', 'rgba(75, 192, 192, 0.8)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `🔄 Return Analysis - ${suffix}`,
+                            color: 'white',
+                            font: { size: 14 }
+                        },
+                        legend: {
+                            position: 'right',
+                            labels: { color: 'white' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
 </body>
 </html>
